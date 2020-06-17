@@ -22,7 +22,7 @@ const EmployerCard = props => {
             />
           </View>
           <View style={styles.detailsContainer}>
-            <View
+            {/* <View
               style={[
                 commonStyles.row,
                 commonStyles.space_btw,
@@ -36,8 +36,8 @@ const EmployerCard = props => {
                 color={colors.appColor1}
                 onPress={() => setFavorite(!isFavorite)}
               />
-            </View>
-            <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
+            </View> */}
+            <Text style={commonStyles.h5}>
               Rs: {props.price}
             </Text>
             <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
@@ -69,7 +69,7 @@ const EmployerCard = props => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: height(3),
+    marginVertical: height(1.5),
     //ios shadow styles
     // elevation: 2,
     // shadowOffset: { width: 1, height: 3 },

@@ -114,7 +114,7 @@ class Home extends Component {
     const navigate = this.props.navigation.navigate;
     return (
       <View style={styles.mainContainer}>
-        <SectionedMultiSelect
+        {/* <SectionedMultiSelect
           ref={Select => (this.Select = Select)}
           items={items}
           uniqueKey="id"
@@ -127,9 +127,9 @@ class Home extends Component {
           selectedItems={this.state.selectedItems}
           styles={{ modalWrapper: { paddingVertical: width(5) } }}
           colors={{ primary: colors.appColor1 }}
-        />
+        /> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[commonStyles.filterContainer, { zIndex: 1 }]}
           onPress={() => this.Select._toggleSelector()}>
           {this.state.selectedItems.length === 0 ? (
@@ -139,10 +139,10 @@ class Home extends Component {
           ) : (
               <ScrollView horizontal={true}>{this._renderChips()}</ScrollView>
             )}
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <DropDownFilter
-          label={'Cities'}
+          label={'City'}
           value={selectedCity.label
             // Object.keys(selectedCity).length
             //   ? selectedCity.attributes.name
@@ -167,12 +167,13 @@ class Home extends Component {
               Categories.map((category, index) => {
                 return (
                   <TouchableOpacity
-                    // onPress={() => Alert.alert('Hello')}
+                    onPress={() => navigate('SearchResultsScreen')}
                     key={"category-" + index} style={{width: '50%', padding: 5}}>
                   <CategoryCard
                     title={category.label}
                     image={category.image}
                     selected={category.selected}
+                    {...this.props}
                   />
                   </TouchableOpacity>
                 )
@@ -182,7 +183,7 @@ class Home extends Component {
           </View>
         </ScrollView>
 
-        <View style={styles.buttonsContainer}>
+        {/* <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={commonStyles.buttonColored}
             onPress={() => navigate('SearchResultsScreen')}>
@@ -193,7 +194,7 @@ class Home extends Component {
               </View>
             ) : null}
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     );
   }

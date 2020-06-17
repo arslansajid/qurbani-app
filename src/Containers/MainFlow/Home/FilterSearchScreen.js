@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {ListItem, SearchBar} from 'react-native-elements';
 import {getCategories, getCities} from '../../../Api/ApiManager';
 import {Cities} from '../../../Api/static/data';
-// import colors from '../../../Themes/Colors';
+import colors from '../../../Themes/Colors';
 // import commonStyles from '../../Styles/commonStyles';
 import {width} from 'react-native-dimension';
 import {
@@ -19,23 +19,45 @@ class FilterSearchScreen extends Component {
     this.state = {
       loading: false,
       searchedInput: '',
-      data: [],
+      // data: [],
+      data: [...Cities],
       error: null,
       value: '',
     };
+    this.arrayholder = [...Cities];
   }
 
+  static navigationOptions = ({ navigation, screenProps, navigationOptions }) => {
+    return {
+      headerTitleStyle: {
+        alignSelf: 'center',
+        textAlign: 'center',
+        flex: 1,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: colors.appColor1,
+      },
+      headerStyle: {
+        elevation: 0,
+        borderWidth: 1,
+        borderColor: '#ededed',
+      },
+      headerTitle: "Select",
+      headerRight: (<View />)
+    };
+  };
+
   componentDidMount() {
-    this.makeRemoteRequest();
+    // this.makeRemoteRequest();
   }
 
   makeRemoteRequest = async () => {
     this.setState({loading: true});
     const type = this.props.navigation.getParam('type');
-    if (type === 'Cities') {
-      // const cities = await getCities();
-      // console.log('cities', cities);
-      this.setState({data: Cities, loading: false});
+    if (type === 'City') {
+      const cities = await getCities();
+      console.log('cities', cities);
+      this.setState({data: cities, loading: false});
     } else if (type === 'Categories') {
       const categories = await getCategories();
       console.log('categories', categories);
@@ -50,7 +72,7 @@ class FilterSearchScreen extends Component {
   onItemPress = selectedItem => {
     console.log('######', selectedItem);
     const type = this.props.navigation.getParam('type');
-    if (type === 'Cities') {
+    if (type === 'City') {
       this.props.dispatch(setCity(selectedItem));
     } else if (type === 'Categories') {
       this.props.dispatch(setCategory(selectedItem));
@@ -58,18 +80,28 @@ class FilterSearchScreen extends Component {
     this.props.navigation.navigate('Home');
   };
 
-  searchFilterFunction = text => {
-    this.setState(
-      {
-        searchedInput: text,
-      },
-      () => {
-        this.makeRemoteRequest();
-      },
-    );
+  // searchFilterFunction = text => {
+  //   this.setState(
+  //     {
+  //       searchedInput: text,
+  //     },
+  //     () => {
+  //       this.makeRemoteRequest();
+  //     },
+  //   );
+  // };
+
+  searchFilterFunction = text => {    
+    const newData = this.arrayholder.filter(item => {      
+      const itemData = `${item.label.toUpperCase()}`;
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;  
+    });
+    this.setState({ data: newData, searchedInput: text });  
   };
 
   render() {
+    console.log('######', this.state);
     return (
       <View>
         <SearchBar

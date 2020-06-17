@@ -11,8 +11,11 @@ import { Icon } from 'react-native-elements';
 import QurbaniFooter from '../../../Components/QurbaniFooter';
 import images from '../../../Themes/Images';
 import Carousel from "react-native-snap-carousel";
+import Swiper from "react-native-swiper";
 import { Animals } from "../../../Api/static/data"
 import { SafeAreaView } from "react-navigation";
+import { Rating, AirbnbRating } from 'react-native-ratings';
+import StarRating from 'react-native-star-rating';
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -41,6 +44,7 @@ class EmployerDetailScreen extends Component {
         borderColor: '#ededed',
       },
       headerTitle: 'Details',
+      headerRight: (<View />)
     };
   };
 
@@ -97,7 +101,7 @@ class EmployerDetailScreen extends Component {
         <SafeAreaView style={{ flex: 1 }} forceInset={{ top: "never", bottom: "always" }}>
           {Object.keys(employer).length && Object.keys(employer).length > 0 ? (
             <View style={styles.mainContainer}>
-              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[commonStyles.align_center, styles.body]}>
+              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.body]}>
                 <Carousel
                   ref={c => (this._carousel = c)}
                   initialNumToRender={2}
@@ -115,8 +119,33 @@ class EmployerDetailScreen extends Component {
                 // contentContainerCustomStyle={{width: 300}}
                 // loop={true}
                 />
-                <Text style={[commonStyles.h3, styles.textRow]}>{employer.label}</Text>
-                <Text style={[commonStyles.h5, styles.textRow]}>Date Posted: {employer.datePosted}</Text>
+                <View style={[commonStyles.space_btw, commonStyles.row, styles.detailsContainer]}>
+                  <Text style={[commonStyles.h3, styles.textRow]}>{employer.label}</Text>
+                
+                {/* <Rating
+                  count={5}
+                  startingValue={4}
+                  style={{ paddingVertical: 10 }}
+                  isDisabled={true}
+                  ratingColor={colors.appColor}
+                  imageSize={25}
+                  ratingColor={colors.appColor}
+                  ratingBackgroundColor='#c8c7c8'
+                /> */}
+                <StarRating
+                  disabled={true}
+                  maxStars={5}
+                  rating={4}
+                  // selectedStar={(rating) => this.onStarRatingPress(rating)}
+                  fullStarColor={colors.appColor1}
+                  starSize={25}
+                  containerStyle={{ paddingVertical: 10 }}
+                />
+                </View>
+                
+
+                
+                {/* <Text style={[commonStyles.h5, styles.textRow]}>Date Posted: {employer.datePosted}</Text> */}
 
                 <View style={styles.locationContainer}>
                   <Icon
@@ -156,15 +185,50 @@ class EmployerDetailScreen extends Component {
                       <Text style={[commonStyles.h5, styles.textRow]}>{!!employer.phone ? employer.phone : "N/A"}</Text>
                     </View>
                   </View>
-                  <View style={styles.detailsRow}>
-                    <View style={styles.labelContainer}>
-                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Contact Number'}</Text>
-                    </View>
-                    <View style={styles.valueContainer}>
-                      <Text style={[commonStyles.h5, styles.textRow]}>{!!employer.phone ? employer.phone : "N/A"}</Text>
-                    </View>
+
+                  <View>
+                    <View style={styles.separator} />
+                    <Text style={[commonStyles.h3, styles.textRow, { marginVertical: height(3) }]}>Recommendations</Text>
+                    <ScrollView
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                      scrollEventThrottle={200}
+                      decelerationRate="fast"
+                    >
+                      {
+                        this.state.images.map((item, index) => {
+                          return (
+                            <TouchableOpacity
+                              onPress={() => {
+                                if (this.props.navigation != null) {
+                                  this.props.navigation.navigate("AnimaRecommendationScreen", {
+                                    selectedIndex: index,
+                                    images: this.state.images
+                                  });
+                                }
+                              }}
+                              activeOpacity={0.9}
+                            >
+                            <View>
+                              <View key={index} style={{ width: 100, height: 100, marginRight: 10 }}>
+                                <Image
+                                  source={{
+                                    uri: item.image,
+                                  }}
+                                  style={styles.image}
+                                  resizeMode={"cover"}
+                                />
+                              </View>
+                              <Text style={[commonStyles.h4, styles.textRow]}>{item.price} Rs</Text>
+                            </View>
+                            </TouchableOpacity>
+                          )
+                        })
+                      }
+                    </ScrollView>
                   </View>
                 </View>
+
               </ScrollView>
 
             </View>

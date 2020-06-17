@@ -15,6 +15,7 @@ import FiltersScreen from '../Containers/MainFlow/Home/FiltersScreen';
 import JobDetailScreen from '../Containers/MainFlow/Home/JobDetailScreen';
 import EmployerDetailScreen from '../Containers/MainFlow/Home/EmployerDetailScreen';
 import AnimalDetailScreen from '../Containers/MainFlow/Home/AnimalDetailScreen';
+import AnimaRecommendationScreen from '../Containers/MainFlow/Home/AnimaRecommendationScreen';
 import ScrollableGalleryScreen from "../Containers/GalleryScreens/ScrollableGalleryScreen";
 import FullscreenGalleryScreen from "../Containers/GalleryScreens/FullscreenGalleryScreen";
 import EmployersListScreen from '../Containers/MainFlow/Home/EmployersListScreen';
@@ -205,6 +206,9 @@ const AppStack = createStackNavigator({
   },
   AnimalDetailScreen: {
     screen: AnimalDetailScreen,
+  },
+  AnimaRecommendationScreen: {
+    screen: AnimaRecommendationScreen
   },
   ScrollableGalleryScreen: {
     screen: ScrollableGalleryScreen

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { getJobsByUserId } from '../../../Api/ApiManager';
 import JobCard from '../../../Components/JobCard';
 import AnimalCard from '../../../Components/AnimalCard';
-import TopFilters from '../../../Components/TopFilters';
+import TopFilters from '../../../Components/QurbaniTopFilter';
 import JobCardPlaceHolder from '../../../Components/JobCardPlaceHolder';
 import ScreenTitle from '../../../Components/ScreenTitle';
 import { Icon } from 'react-native-elements';
@@ -42,19 +42,20 @@ class SearchResultsScreen extends Component {
       },
       headerTitle: <ScreenTitle jobsCount={jobsCount} />,
       headerRight: (
-        <TouchableOpacity
-          style={commonStyles.filterIcon}
-          underlayColor={'transparent'}
-          onPress={() => {
-            navigation.navigate('FiltersScreen');
-          }}>
-          <Icon
-            type="materialIcon"
-            style={{ zIndex: 20 }}
-            name={'filter-list'}
-            size={22}
-          />
-        </TouchableOpacity>
+        // <TouchableOpacity
+        //   style={commonStyles.filterIcon}
+        //   underlayColor={'transparent'}
+        //   onPress={() => {
+        //     navigation.navigate('FiltersScreen');
+        //   }}>
+        //   <Icon
+        //     type="materialIcon"
+        //     style={{ zIndex: 20 }}
+        //     name={'filter-list'}
+        //     size={22}
+        //   />
+        // </TouchableOpacity>
+        <View />
       ),
     };
   };
@@ -129,7 +130,7 @@ class SearchResultsScreen extends Component {
     const { jobs } = this.state;
     return (
       <>
-        {/* <TopFilters {...this.props} /> */}
+        <TopFilters {...this.props} />
         <View style={styles.mainContainer}>
           <View style={styles.jobsContainer}>
             <FlatList
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   jobsContainer: {
-    marginBottom: height(5),
+    // marginBottom: height(5),
     // flexDirection: 'row'
   },
   separator: {

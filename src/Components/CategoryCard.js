@@ -9,7 +9,8 @@ import {Icon} from 'react-native-elements';
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
 const CategoryCard = (props) => {
-    const { title, image } = props;
+    const { title, image, navigation } = props;
+    const navigate = navigation.navigate;
     const [selected, setSelected] = React.useState(false);
 
     const selectCard = () => {
@@ -30,11 +31,11 @@ const CategoryCard = (props) => {
                 </View>
             )
         } */}
-        <Card onPress={() => selectCard()} style={{ width: '100%'}}>
-            <Card.Cover resizeMode={"cover"} style={{ height: totalSize(10) }} source={{ uri: image }} />
+        <Card onPress={() => navigate('SearchResultsScreen')} style={{ width: '100%'}}>
+            <Card.Cover resizeMode={"cover"} style={{ height: totalSize(15) }} source={{ uri: image }} />
             <Card.Content style={{paddingBottom: 0, paddingHorizontal: 0}}>
-                <Title style={{textAlign: 'center'}}>{title}</Title>
-                {/* <Paragraph>Card content</Paragraph> */}
+                {/* <Title style={{textAlign: 'center'}}>{title}</Title> */}
+                <Paragraph style={{textAlign: 'center'}}>{title}</Paragraph>
             </Card.Content>
         </Card>
         </>

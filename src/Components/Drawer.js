@@ -13,6 +13,8 @@ import {Icon} from 'react-native-elements';
 import {totalSize, height, width} from 'react-native-dimension';
 import commonStyles from '../Containers/Styles/commonStyles';
 import images from '../Themes/Images';
+import { Avatar } from 'react-native-paper';
+
 
 export default class Drawer extends Component {
   constructor(props) {
@@ -23,16 +25,30 @@ export default class Drawer extends Component {
     return (
       <SafeAreaView style={{flex: 1}}>
         <View style={{flex: 1, backgroundColor: colors.appColor1}}>
-          <View
+          {/* <View
             style={{
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-          </View>
+          </View> */}
           <View style={{flex: 7}}>
             <ScrollView>
-              <DrawerItems {...this.props} />
+              {/* <DrawerItems {...this.props} /> */}
+              <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    marginVertical: height(2),
+                    alignItems: 'center',
+                    // justifyContent: 'center'
+                  }}>
+                    <Avatar.Image size={48} source={images.avatar} style={{margin: width(6)}} />
+                  <Text style={[commonStyles.h3, {color: colors.white}]}>Arslan Sajid</Text>
+                </View>
+              <View>
+              
+              </View>
               {/* <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('EmployersListScreen');
@@ -236,19 +252,6 @@ export default class Drawer extends Component {
                 </View>
               </TouchableOpacity>
             </ScrollView>
-          </View>
-          <View style={{alignItems: 'center', justifyContent: 'center'}}>
-            <View style={{}}>
-              <Image
-                source={images.logo}
-                resizeMode="contain"
-                style={{
-                  height: totalSize(10),
-                  width: totalSize(10),
-                  borderRadius: 5,
-                }}
-              />
-            </View>
           </View>
         </View>
       </SafeAreaView>

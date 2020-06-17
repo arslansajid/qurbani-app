@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Linking, Alert } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Alert, Share } from "react-native";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import commonStyles from '../Containers/Styles/commonStyles';
@@ -15,6 +15,27 @@ class ApplyJobFooter extends Component {
     this.state = {
     };
   }
+
+  onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          "Qurbani App is the best app."
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   render() {
     const SUPPORT_EMAIL = "support@qurbaniapp.com";
@@ -52,7 +73,7 @@ class ApplyJobFooter extends Component {
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity
-            onPress={() => Linking.openURL("tel:" + SUPPORT_PHONE_NUMBER)}
+            onPress={this.onShare}
             style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }]}>
             <Icon
               name={'share'}

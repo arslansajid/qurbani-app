@@ -34,7 +34,7 @@ class DropDownFilter extends Component {
             color={colors.appColor1}
             size={totalSize(2)}
             onPress={
-              value && label === 'Cities'
+              value && label === 'City'
                 ? () => dispatch(resetCity())
                 : () => dispatch(resetCategory())
             }

@@ -5,6 +5,7 @@ const images = {
   goatLogo: require('../../images/goat.png'),
   cowLogo: require('../../images/cow.png'),
   placeholder: require('../../images/placeholder.jpg'),
+  avatar: require('../../images/avatar2.png'),
 };
 
 export default images;
