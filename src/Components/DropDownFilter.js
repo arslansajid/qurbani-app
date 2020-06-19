@@ -31,8 +31,8 @@ class DropDownFilter extends Component {
           <Icon
             name={value ? 'times-circle' : 'angle-down'}
             type="font-awesome"
-            color={colors.appColor1}
-            size={totalSize(2)}
+            color={colors.white}
+            size={totalSize(2.5)}
             onPress={
               value && label === 'City'
                 ? () => dispatch(resetCity())
