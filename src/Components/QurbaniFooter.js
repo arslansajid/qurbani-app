@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     // backgroundColor: "white",
     paddingHorizontal: 5,
-    paddingVertical: 10,
+    paddingVertical: 5,
     elevation: 24,
     borderColor: colors.borderColor,
     // for ios only
