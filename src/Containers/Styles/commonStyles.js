@@ -176,8 +176,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     paddingHorizontal: 20,
-    borderColor: colors.appColor1,
-    borderWidth: 1,
+    // borderColor: colors.appColor1,
+    // borderWidth: 1,
+    backgroundColor: colors.appColor1,
     marginBottom: height(3),
     fontSize: totalSize(2),
     overflow: 'hidden',
@@ -185,6 +186,7 @@ export default StyleSheet.create({
   filterText: {
     // lineHeight: 16.5,
     fontSize: totalSize(2),
+    color: colors.white,
   },
   filterIcon: {
     backgroundColor: '#ededed',

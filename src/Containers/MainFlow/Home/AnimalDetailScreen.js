@@ -62,8 +62,9 @@ class EmployerDetailScreen extends Component {
       weight: '140 kg',
       location: 'Islamabad',
       price: '1,00,000',
-      phone: '+92-321-6375414',
+      phone: '0321-6375414',
       datePosted: '12-April-2019',
+      description: 'Very healthy and beautiful animal in white color.'
     }
     this.setState({ employer: animal });
   }
@@ -109,7 +110,7 @@ class EmployerDetailScreen extends Component {
                   data={this.state.images}
                   renderItem={this._renderItem}
                   sliderWidth={SCREEN_WIDTH}
-                  itemWidth={SCREEN_WIDTH - 50}
+                  itemWidth={SCREEN_WIDTH - 20}
                   inactiveSlideOpacity={1}
                   inactiveSlideScale={0.99}
                   useScrollView={false}
@@ -119,35 +120,22 @@ class EmployerDetailScreen extends Component {
                 // contentContainerCustomStyle={{width: 300}}
                 // loop={true}
                 />
-                <View style={[commonStyles.space_btw, commonStyles.row, styles.detailsContainer]}>
-                  <Text style={[commonStyles.h3, styles.textRow]}>{employer.label}</Text>
-                
-                {/* <Rating
-                  count={5}
-                  startingValue={4}
-                  style={{ paddingVertical: 10 }}
-                  isDisabled={true}
-                  ratingColor={colors.appColor}
-                  imageSize={25}
-                  ratingColor={colors.appColor}
-                  ratingBackgroundColor='#c8c7c8'
-                /> */}
+                <View style={[commonStyles.space_btw, commonStyles.row, commonStyles.align_center, styles.detailsContainer]}>
+                  <Text style={[commonStyles.h3]}>{employer.label}</Text>
                 <StarRating
                   disabled={true}
                   maxStars={5}
                   rating={4}
                   // selectedStar={(rating) => this.onStarRatingPress(rating)}
                   fullStarColor={colors.appColor1}
-                  starSize={25}
-                  containerStyle={{ paddingVertical: 10 }}
+                  starSize={totalSize(2.25)}
+                  starStyle={{paddingLeft: 3}}
                 />
                 </View>
-                
-
-                
+ 
                 {/* <Text style={[commonStyles.h5, styles.textRow]}>Date Posted: {employer.datePosted}</Text> */}
 
-                <View style={styles.locationContainer}>
+                {/* <View style={styles.locationContainer}>
                   <Icon
                     name="map-marker"
                     type="material-community"
@@ -157,19 +145,48 @@ class EmployerDetailScreen extends Component {
                   <Text style={[commonStyles.h4, styles.textRow]}>Location: {employer.location}, Pakistan</Text>
                   <Text style={[commonStyles.h4, styles.textRow]}>Weight: {employer.weight} (3.5 mann)</Text>
                   <Text style={[commonStyles.h4, styles.textRow]}>Price: {employer.price}/- Rs</Text>
-                </View>
+                </View> */}
+
+                <View style={[{marginTop: 10}, styles.detailsContainer]}>
+                <View style={styles.detailsRow}>
+                    <View style={styles.leftContainer}>
+                      <Text style={[commonStyles.h4]}>{'Price:'} {employer.price}/- Rs</Text>
+                    </View>
+                    <View style={styles.rightContainer}>
+                      <Text style={[commonStyles.h4]}>{'Wgt:'} {employer.weight} ({employer.weight.split(" ")[0] / 40} mann)</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.detailsRow}>
+                    <View style={styles.leftContainer}>
+                      <Text style={[commonStyles.h4]}>Gender: {'Male'}</Text>
+                    </View>
+                    <View style={styles.rightContainer}>
+                      <Text style={[commonStyles.h4]}>Cell#: {employer.phone}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.detailsRow}>
+                    <View style={styles.leftContainer}>
+                      <Text style={[commonStyles.h4]}>{'Animal Id: 1234'}</Text>
+                    </View>
+                    <View style={styles.rightContainer}>
+                      <Text style={[commonStyles.h4]}>{employer.location}</Text>
+                    </View>
+                  </View>
+                  </View>
 
                 <View style={styles.detailsContainer}>
                   <View style={styles.separator} />
                   <View style={styles.detailsRow}>
                     <View style={styles.labelContainer}>
-                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Location'}</Text>
+                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Description'}</Text>
                     </View>
                     <View style={styles.valueContainer}>
-                      <Text style={[commonStyles.h5, styles.textRow]}>{employer.location}</Text>
+                      <Text style={[commonStyles.h5, styles.textRow]}>{employer.description}</Text>
                     </View>
                   </View>
-                  <View style={styles.detailsRow}>
+                  {/* <View style={styles.detailsRow}>
                     <View style={styles.labelContainer}>
                       <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Weight'}</Text>
                     </View>
@@ -184,7 +201,7 @@ class EmployerDetailScreen extends Component {
                     <View style={styles.valueContainer}>
                       <Text style={[commonStyles.h5, styles.textRow]}>{!!employer.phone ? employer.phone : "N/A"}</Text>
                     </View>
-                  </View>
+                  </View> */}
 
                   <View>
                     <View style={styles.separator} />
@@ -201,7 +218,7 @@ class EmployerDetailScreen extends Component {
                             <TouchableOpacity
                               onPress={() => {
                                 if (this.props.navigation != null) {
-                                  this.props.navigation.navigate("AnimaRecommendationScreen", {
+                                  navigate("AnimaRecommendationScreen", {
                                     selectedIndex: index,
                                     images: this.state.images
                                   });
@@ -220,6 +237,7 @@ class EmployerDetailScreen extends Component {
                                 />
                               </View>
                               <Text style={[commonStyles.h4, styles.textRow]}>{item.price} Rs</Text>
+                              <Text style={[commonStyles.h4, styles.textRow]}>{item.weight}</Text>
                             </View>
                             </TouchableOpacity>
                           )
@@ -253,7 +271,7 @@ const styles = StyleSheet.create({
   },
   body: {
     // flex: 1,
-    paddingBottom: 100
+    paddingBottom: 70
   },
   textRow: {
     marginTop: height(1),
@@ -273,7 +291,7 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     alignSelf: 'flex-start',
-    paddingHorizontal: width(5),
+    paddingHorizontal: width(3),
     // paddingTop: width(5),
     width: '100%',
     // backgroundColor: 'green'
@@ -282,6 +300,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: height(1),
     // backgroundColor: 'red'
+  },
+  leftContainer: {
+    flex: 1,
+    // justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    borderColor: colors.appColor1,
+    borderRightWidth: 2
+  },
+  rightContainer: {
+    flex: 1,
+    // justifyContent: 'flex-end',
+    // alignItems: 'flex-end',
+    paddingLeft: width(3),
   },
   labelContainer: {
     flex: 1
