@@ -48,11 +48,11 @@ class TopFilters extends Component {
   render() {
     console.log(this.state);
     let weight = [{
-      value: '40 kg - 80 kg (2-3 mann)',
+      value: '40 - 80 kg (2-3 mann)',
     }, {
-      value: '80 kg- 120 kg (3-4 mann)',
+      value: '80 - 120 kg (3-4 mann)',
     }, {
-      value: '120 kg- 160 kg (3-4 mann)',
+      value: '120 - 160 kg (3-4 mann)',
     }];
     let price = [{
       value: '40,000 - 50,000 Rs',
@@ -67,44 +67,7 @@ class TopFilters extends Component {
           style={styles.container}>
 
           <View style={styles.filterContainer}>
-            {/* <TouchableOpacity
-              onPress={() => this.toggleFilter('price')}
-              style={styles.editBtn}>
-              <Text style={{ color: Colors.appColor1, fontSize: 14 }}>Price</Text>
-              {
-                !!this.state.selectedPrice && (
-                  <Text style={{ color: Colors.appColor1, fontSize: 14 }}>{this.state.selectedPrice}</Text>
-                )
-              }
-            </TouchableOpacity> */}
-            <Picker
-              mode={"dropdown"}
-              selectedValue={this.state.selectedPrice}
-              style={styles.editBtn}
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({ selectedPrice: itemValue })
-              }>
-              <Picker.Item label="Price" value="0" />
-              {
-                price.map((option, index) => {
-                  return (
-                    <Picker.Item label={option.value} value={option.value} />
-                  )
-                })
-              }
-            </Picker>
-          </View>
-          <View style={styles.filterContainer}>
-            {/* <TouchableOpacity
-              onPress={() => this.toggleFilter('weight')}
-              style={styles.editBtn}>
-              <Text style={{ color: Colors.appColor1, fontSize: 14 }}>Weight</Text>
-              {
-                !!this.state.selectedWeight && (
-                  <Text style={{ color: Colors.appColor1, fontSize: 14 }}>{this.state.selectedWeight}</Text>
-                )
-              }
-            </TouchableOpacity> */}
+          <View style={styles.editBtnContainer}>
             <Picker
               mode={"dropdown"}
               selectedValue={this.state.selectedWeight}
@@ -112,7 +75,7 @@ class TopFilters extends Component {
               onValueChange={(itemValue, itemIndex) =>
                 this.setState({ selectedWeight: itemValue })
               }>
-              <Picker.Item label="Weight" value="0" />
+              <Picker.Item label="Select Weight" value="0" />
               {
                 weight.map((option, index) => {
                   return (
@@ -121,7 +84,30 @@ class TopFilters extends Component {
                 })
               }
             </Picker>
+            </View>
           </View>
+
+          <View style={styles.filterContainer}>
+            <View style={styles.editBtnContainer}>
+            <Picker
+              mode={"dropdown"}
+              selectedValue={this.state.selectedPrice}
+              style={styles.editBtn}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({ selectedPrice: itemValue })
+              }>
+              <Picker.Item label="Select Price" value="0" />
+              {
+                price.map((option, index) => {
+                  return (
+                    <Picker.Item label={option.value} value={option.value} />
+                  )
+                })
+              }
+            </Picker>
+            </View>
+          </View>
+
         </View>
       </>
     );
@@ -147,25 +133,31 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    backgroundColor:colors.appColor1
   },
-  editBtn: {
+  editBtnContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: Colors.appColor1,
-    // borderWidth: 1,
+    borderColor: Colors.appColor1,
+    borderWidth: 1,
     marginVertical: 8,
     borderRadius: 4,
     flex: 1,
     width: '100%',
-    color: colors.white
+  },
+  editBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    width: '100%',
+    color: colors.white,
+    backgroundColor: colors.appColor1
   },
   filterContainer: {
     minWidth: width / 2,
     justifyContent: 'center',
     alignItems: 'center',
-    // borderRightWidth: 1,
-    // borderColor: '#d8d8d8',
+    borderRightWidth: 1,
+    borderColor: '#d8d8d8',
     paddingHorizontal: 5,
   },
   filterLabel: {
