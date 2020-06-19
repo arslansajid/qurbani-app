@@ -37,16 +37,17 @@ const EmployerCard = props => {
                 onPress={() => setFavorite(!isFavorite)}
               />
             </View> */}
-            <Text style={commonStyles.h5}>
-              Rs: {props.price}
-            </Text>
-            <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
-              {props.weight}
-            </Text>
+                <Text style={commonStyles.h5}>
+                  Price: {props.price}/- Rs
+                </Text>
+                <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
+                  Weight: {props.weight} ({props.weight.split(" ")[0] / 40} mann)
+                </Text>
+            
             {/* <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
-              {props.companyName}
+              Gender: Male
             </Text> */}
-            <View
+            {/* <View
               style={[
                 commonStyles.row,
                 commonStyles.space_btw,
@@ -54,12 +55,12 @@ const EmployerCard = props => {
                 { marginTop: height(1) },
               ]}>
               <Text style={commonStyles.h4}>
-                Location:{' '}
+                City:{' '}
                 <Text style={commonStyles.h5}>
                   {props.jobCity}
                 </Text>
               </Text>
-            </View>
+            </View> */}
           </View>
         </View>
       </View>
