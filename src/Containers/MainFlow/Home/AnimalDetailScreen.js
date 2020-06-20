@@ -147,7 +147,7 @@ class EmployerDetailScreen extends Component {
                   <Text style={[commonStyles.h4, styles.textRow]}>Price: {employer.price}/- Rs</Text>
                 </View> */}
 
-                <View style={[{marginTop: 10}, styles.detailsContainer]}>
+                <View style={[{marginTop: 10}, styles.dataContainer]}>
                 <View style={styles.detailsRow}>
                     <View style={styles.leftContainer}>
                       <Text style={[commonStyles.h4]}>{'Price:'} {employer.price}/- Rs</Text>
@@ -159,16 +159,16 @@ class EmployerDetailScreen extends Component {
 
                   <View style={styles.detailsRow}>
                     <View style={styles.leftContainer}>
-                      <Text style={[commonStyles.h4]}>Gender: {'Male'}</Text>
+                      <Text style={[commonStyles.h4]}>{'Animal ID: 1234'}</Text>
                     </View>
                     <View style={styles.rightContainer}>
-                      <Text style={[commonStyles.h4]}>Cell#: {employer.phone}</Text>
+                      <Text style={[commonStyles.h4]}>Cell #: {employer.phone}</Text>
                     </View>
                   </View>
 
                   <View style={styles.detailsRow}>
                     <View style={styles.leftContainer}>
-                      <Text style={[commonStyles.h4]}>{'Animal Id: 1234'}</Text>
+                      <Text style={[commonStyles.h4]}>Gender: {'Male'}</Text>
                     </View>
                     <View style={styles.rightContainer}>
                       <Text style={[commonStyles.h4]}>{employer.location}</Text>
@@ -296,6 +296,12 @@ const styles = StyleSheet.create({
     width: '100%',
     // backgroundColor: 'green'
   },
+  dataContainer: {
+    alignSelf: 'flex-start',
+    paddingLeft: width(3),
+    paddingRight: width(2),
+    width: '100%',
+  },
   detailsRow: {
     flexDirection: 'row',
     marginTop: height(1),
@@ -312,7 +318,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'flex-end',
     // alignItems: 'flex-end',
-    paddingLeft: width(3),
+    paddingLeft: width(2),
   },
   labelContainer: {
     flex: 1

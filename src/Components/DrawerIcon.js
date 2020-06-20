@@ -7,11 +7,11 @@ const DrawerButton = props => {
   return (
     <TouchableOpacity
       style={{paddingHorizontal: width(5)}}
-      onPress={() => props.navigation.openDrawer()}>
+      onPress={() => props.navigation.toggleDrawer()}>
       <Icon
         name="menu"
         size={totalSize(3)}
-        onPress={() => props.navigation.openDrawer()}
+        // onPress={() => props.navigation.openDrawer()}
       />
     </TouchableOpacity>
   );

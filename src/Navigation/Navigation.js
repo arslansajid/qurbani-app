@@ -16,6 +16,7 @@ import JobDetailScreen from '../Containers/MainFlow/Home/JobDetailScreen';
 import EmployerDetailScreen from '../Containers/MainFlow/Home/EmployerDetailScreen';
 import AnimalDetailScreen from '../Containers/MainFlow/Home/AnimalDetailScreen';
 import AnimaRecommendationScreen from '../Containers/MainFlow/Home/AnimaRecommendationScreen';
+import AnimalUploadScreen from '../Containers/MainFlow//Home/AnimalUploadScreen';
 import ScrollableGalleryScreen from "../Containers/GalleryScreens/ScrollableGalleryScreen";
 import FullscreenGalleryScreen from "../Containers/GalleryScreens/FullscreenGalleryScreen";
 import EmployersListScreen from '../Containers/MainFlow/Home/EmployersListScreen';
@@ -75,13 +76,9 @@ const MainAppTab = createBottomTabNavigator(
           ),
       },
     },
-    Notifications: {
-      screen: Notification,
+    AnimalUpload: {
+      screen:  AnimalUploadScreen,
       navigationOptions: {
-        // tabBarOptions: {
-        //   style: {
-        // }
-        // },
         tabBarLabel: 'Sell',
         tabBarIcon: ({tintColor, focused}) =>
           focused ? (

@@ -1,28 +1,29 @@
+import Images from "../../Themes/Images";
 
 export const Categories = [
     {
-        label: 'Cow',
-        image: 'https://i.pinimg.com/originals/3b/04/81/3b0481a585fa4d21abce53d6ced1b05f.jpg'
+        label: 'Bull',
+        image: Images.bull
     },
     {
-        label: 'Goat',
-        image: 'https://5.imimg.com/data5/MB/PS/MY-2573306/boer-goat-500x500.png'
+        label: 'Saand',
+        image: Images.saand,
+    },
+    {
+        label: 'Camel',
+        image: Images.camel,
+    },
+    {
+        label: 'Bakra',
+        image: Images.bakra
     },
     {
         label: 'Sheep',
-        image: 'https://live.staticflickr.com/188/477334244_fb34fe6b5a_b.jpg',
+        image: Images.sheep,
     },
     {
-        label: 'Certified Stock',
-        image: 'https://cdn.britannica.com/41/119041-050-8B84B093/goat.jpg',
-    },
-    {
-        label: 'Sadqa Aqiqa Stock',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hausziege_04.jpg/1200px-Hausziege_04.jpg',
-    },
-    {
-        label: 'Featured Animals',
-        image: 'https://5.imimg.com/data5/MB/PS/MY-2573306/boer-goat-500x500.png',
+        label: 'Dumba',
+        image: Images.dumba,
     },
 ]
 
