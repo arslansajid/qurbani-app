@@ -18,6 +18,7 @@ import type from '../../Themes/Fonts';
 import Modal from 'react-native-modal';
 import Config from '../../Config';
 import axiosInstance from '../../api.config';
+import {signUp} from '../../Backend/Services/authService';
 import { SafeAreaView } from "react-navigation";
 
 import FacebookIcon from '../../../Icons/social-icons/facebook-icon.png';
@@ -77,6 +78,14 @@ class SignUp extends Component {
     //     this.setState({ loading: false, success: false });
     //     console.log('################ ERROR', error);
     //   });
+
+    signUp("arslan@gmail.com", "123456")
+    .then((res) => {
+      console.log("######## res", res)
+    })
+    .catch((err) => {
+      console.log("######## err", err)
+    })
     
           setTimeout(() => {
             this.props.navigation.navigate('SignIn');

@@ -14,6 +14,7 @@ import ScreenTitle from '../../../Components/ScreenTitle';
 import { Icon } from 'react-native-elements';
 import { FavoriteJobsProvider } from '../../../Context/FavoriteJobsContext';
 import {Animals} from "../../../Api/static/data"
+import {getBulls} from "../../../Backend/Services/bullService";
 
 class SearchResultsScreen extends Component {
   constructor(props) {
@@ -63,9 +64,19 @@ class SearchResultsScreen extends Component {
   async componentDidMount() {
     // const jobs = await getJobsByUserId(/* this.props.selectedCategory.id */);
     // console.log('jobs', jobs);
-    const jobs = [...Animals];
-    this.setState({ jobs });
-    this.updateScreenHeader(jobs);
+    getBulls()
+    .then((res) => {
+      console.log("########### res", res)
+      const jobs = [...res];
+      this.setState({ jobs });
+      this.updateScreenHeader(jobs);
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+    })
+    // const jobs = [...Animals];
+    // this.setState({ jobs });
+    // this.updateScreenHeader(jobs);
   }
 
   updateFavoriteJobs = job => {
