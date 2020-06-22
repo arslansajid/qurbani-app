@@ -27,6 +27,15 @@ import Autocomplete from 'react-native-autocomplete-input';
 // import ImagePicker from 'react-native-image-crop-picker';
 // import { Switch } from 'react-native-switch';
 import { Switch } from 'react-native-paper';
+import {addBull} from "../../../Backend/Services/bullService";
+import {firebase} from "../../../Backend/firebase";
+import { v4 as uuidv4 } from 'uuid';
+import RNFetchBlob from 'react-native-fetch-blob'
+
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
 
 const options = {
   title: 'Select Files',
@@ -42,12 +51,14 @@ class AnimalUploadScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       selectedItems: [],
       avatarSource: null,
       isPicture: true,
       query: "",
       data: [...Cities],
-      gender: "Male"
+      gender: "Male",
+      imageUrl: '',
     };
     this.arrayholder = [...Cities];
   }
@@ -78,16 +89,49 @@ class AnimalUploadScreen extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        // const source = { uri: response.uri };
+        const image = response.uri;
 
         // You can also display the image using data:
         const source = { uri: 'data:image/jpeg;base64,' + response.data };
         
         this.setState({
           avatarSource: source,
+          image
         });
       }
     });
+  }
+
+  uploadImage(uri, mime = 'image/jpeg') {
+    return new Promise((resolve, reject) => {
+      const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
+      let uploadBlob = null
+
+      const imageRef = firebase
+          .storage()
+          .ref()
+          .child('Events')
+          .child(`${uuidv4()}.jpeg`);
+
+      fs.readFile(uploadUri, 'base64')
+        .then((data) => {
+          return Blob.build(data, { type: `${mime};BASE64` })
+        })
+        .then((blob) => {
+          uploadBlob = blob
+          return imageRef.put(blob, { contentType: mime })
+        })
+        .then(() => {
+          uploadBlob.close()
+          return imageRef.getDownloadURL()
+        })
+        .then((url) => {
+          resolve(url)
+        })
+        .catch((error) => {
+          reject(error)
+      })
+    })
   }
 
   _onToggleSwitch = value => {
@@ -113,11 +157,41 @@ class AnimalUploadScreen extends Component {
     this.setState({ data: newData, query: text });
   };
 
+  submitForm = async () => {
+    const {location, price, contact, weight, gender, description, image } = this.state;
+
+    const downloadUrl = await this.uploadImage(image)
+    console.log("downloadUrl", downloadUrl)
+
+          const animal = {
+            image: downloadUrl,
+            location: location,
+            price: price ,
+            contact: contact,
+            weight: weight,
+            gender: gender,
+            description: description,
+          }
+          this.setState({ loading: true });
+          addBull(animal)
+          .then((res) => {
+            console.log("###### res", res)
+            alert("Animal Added")
+            this.setState({ loading: false });
+          })
+          .catch((err) => {
+            console.log("###### err", err)
+            alert("Error Adding Animal!")
+            this.setState({ loading: false });
+          })
+  }
+
   render() {
     const { selectedCity, selectedCategory } = this.props;
     const navigate = this.props.navigation.navigate;
     const { query, data, isPicture } = this.state;
     // const data = this.searchFilterFunction(query);
+    console.log("###### STATE", this.state)
     return (
       <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
@@ -220,23 +294,27 @@ class AnimalUploadScreen extends Component {
         <Input
           placeholder="City *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
+          onChangeText={location => this.setState({location})}
         />
 
         <Input
           placeholder="Price *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
+          onChangeText={price => this.setState({price})}
           keyboardType="numeric"
         />
 
         <Input
           placeholder="Contact Number *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
+          onChangeText={contact => this.setState({contact})}
           keyboardType="numeric"
         />
 
         <Input
           placeholder="Weight *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
+          onChangeText={weight => this.setState({weight})}
           keyboardType="numeric"
         />
 
@@ -262,18 +340,19 @@ class AnimalUploadScreen extends Component {
         <Input
           placeholder="Description"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
+          onChangeText={description => this.setState({description})}
         />
 
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={[commonStyles.buttonColored]}
-            onPress={() => alert('Animal Uploaded')}>
+            onPress={() => this.submitForm()}>
             <Text style={[commonStyles.textButton, {}]}>Upload</Text>
-            {/* {this.state.loading ? (
-                        <View style={commonStyles.btnLoader}>
-                          <ActivityIndicator color="white" size="small" />
-                        </View>
-                      ) : null} */}
+            {this.state.loading ? (
+              <View style={commonStyles.btnLoader}>
+                <ActivityIndicator color="white" size="small" />
+              </View>
+            ) : null}
           </TouchableOpacity>
         </View>
       </ScrollView>
