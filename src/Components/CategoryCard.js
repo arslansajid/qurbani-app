@@ -9,13 +9,8 @@ import {setCategory} from '../redux/actions/CandidateFiltersActions';
   import {connect} from 'react-redux';
 
 const CategoryCard = (props) => {
-    const { title, image, navigation, parent } = props;
+    const { title, image, navigation, parent, onSelect, selected, index } = props;
     const navigate = navigation.navigate;
-    const [selected, setSelected] = React.useState(false);
-
-    const selectCard = () => {
-        setSelected(!selected);
-    }
 
     const onCardSelect = (value) => {
         console.log("########### seleted value", value)
@@ -38,7 +33,7 @@ const CategoryCard = (props) => {
             )
         }
         <TouchableOpacity
-            onPress={() => parent === "upload" ? selectCard() : onCardSelect(title) }
+            onPress={() => parent === "upload" ? onSelect(title) : onCardSelect(title) }
             style={{ width: '100%', zIndex: 1, marginBottom: height(1)}}>
             <Card.Cover resizeMode={"cover"} style={{ height: totalSize(15), zIndex: 1 }} source={image} />
             <Card.Content style={{paddingBottom: 0, paddingHorizontal: 0}}>

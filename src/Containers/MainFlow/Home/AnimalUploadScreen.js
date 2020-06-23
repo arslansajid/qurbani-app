@@ -11,7 +11,7 @@ import {
   TextInput as Input,
   Image
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
+import { Picker } from '@react-native-community/picker';
 import { totalSize, height, width } from 'react-native-dimension';
 import commonStyles from '../../Styles/commonStyles';
 import Colors from '../../../Themes/Colors';
@@ -27,11 +27,12 @@ import Autocomplete from 'react-native-autocomplete-input';
 // import ImagePicker from 'react-native-image-crop-picker';
 // import { Switch } from 'react-native-switch';
 import { Switch } from 'react-native-paper';
-import {addBull} from "../../../Backend/Services/bullService";
-import {firebase} from "../../../Backend/firebase";
+import { addBull } from "../../../Backend/Services/bullService";
+import { firebase } from "../../../Backend/firebase";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import RNFetchBlob from 'react-native-fetch-blob'
+import { Bull } from '../../../Backend/Models/bull';
 
 // const Blob = RNFetchBlob.polyfill.Blob
 // const fs = RNFetchBlob.fs
@@ -62,13 +63,17 @@ class AnimalUploadScreen extends Component {
       data: [...Cities],
       gender: "Male",
       imageUrl: '',
+      selectedCategory: null,
+      categories: [...Categories]
     };
     this.arrayholder = [...Cities];
   }
 
-  onSelectedItemsChange = selectedItems => {
-    this.setState({ selectedItems });
-  };
+
+
+  onSelectCategory = (value) => {
+    this.setState({ selectedCategory: value })
+  }
 
   showImagePicker = () => {
     // ImagePicker.openPicker({
@@ -96,7 +101,7 @@ class AnimalUploadScreen extends Component {
 
         // You can also display the image using data:
         const source = { uri: 'data:image/jpeg;base64,' + response.data };
-        
+
         this.setState({
           avatarSource: source,
           image
@@ -115,10 +120,10 @@ class AnimalUploadScreen extends Component {
       let uploadBlob = null
 
       const imageRef = firebase
-          .storage()
-          .ref()
-          .child('Events')
-          .child(`${uuidv4()}.jpeg`);
+        .storage()
+        .ref()
+        .child(this.state.selectedCategory)
+        .child(`${uuidv4()}.jpeg`);
 
       fs.readFile(uploadUri, 'base64')
         .then((data) => {
@@ -137,7 +142,7 @@ class AnimalUploadScreen extends Component {
         })
         .catch((error) => {
           reject(error)
-      })
+        })
     })
   }
 
@@ -155,45 +160,56 @@ class AnimalUploadScreen extends Component {
     this.setState({ selectedItems: Items });
   };
 
-  searchFilterFunction = text => {    
-    const newData = this.arrayholder.filter(item => {      
+  searchFilterFunction = text => {
+    const newData = this.arrayholder.filter(item => {
       const itemData = `${item.label.toUpperCase()}`;
       const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;  
+      return itemData.indexOf(textData) > -1;
     });
     this.setState({ data: newData, query: text });
   };
 
   submitForm = async () => {
-    const {location, price, contact, weight, gender, description, image } = this.state;
+    const { location, price, contact, weight, gender, description, image, selectedCategory } = this.state;
 
-    this.setState({ loading: true });
+    if (!!location && price && contact && weight && gender && description && image && selectedCategory) {
 
-    const downloadUrl = await this.uploadImage(image)
-    console.log("downloadUrl", downloadUrl)
+      this.setState({ loading: true });
 
-          const animal = {
-            image: downloadUrl,
-            location: location,
-            price: price ,
-            contact: contact,
-            weight: weight,
-            gender: gender,
-            description: description,
-          }
-          
-          window.XMLHttpRequest = tempWindowXMLHttpRequest;
-          addBull(animal)
-          .then((res) => {
-            console.log("###### res", res)
-            alert("Animal Added")
-            this.setState({ loading: false });
-          })
-          .catch((err) => {
-            console.log("###### err", err)
-            alert("Error Adding Animal!")
-            this.setState({ loading: false });
-          })
+      const downloadUrl = await this.uploadImage(image)
+      console.log("downloadUrl", downloadUrl)
+
+      const animal = {
+        image: downloadUrl,
+        location: location,
+        price: price,
+        contact: contact,
+        weight: weight,
+        gender: gender,
+        description: description,
+      }
+
+      window.XMLHttpRequest = tempWindowXMLHttpRequest;
+
+      if (selectedCategory === "Bull") {
+        this.createBull(animal)
+      }
+    } else {
+      alert('Some mandatory field(s) are missing!')
+    }
+  }
+
+  createBull = (animal) => {
+    addBull(animal)
+      .then(() => {
+        alert("Animal Added Successfully!")
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        console.log("###### err", err)
+        alert("Error Adding Animal!")
+        this.setState({ loading: false });
+      })
   }
 
   render() {
@@ -225,27 +241,27 @@ class AnimalUploadScreen extends Component {
         }
         {
           !!this.state.avatarSource && (
-              <Image source={this.state.avatarSource} style={styles.uploadAvatar} />
-            )
+            <Image source={this.state.avatarSource} style={styles.uploadAvatar} />
+          )
         }
-        <View style={{minHeight: 60}}>
-          <Text style={commonStyles.h4}>Select Type: {!!isPicture ? "Picture" : "Video" }</Text>
-          <View style={{position: 'relative'}}>
-          <Switch
-            color={Colors.appColor1}
-            value={isPicture}
-            onValueChange={this._onToggleSwitch}
-            style={{position: 'absolute', left: 0}}
-          />
+        <View style={{ minHeight: 60 }}>
+          <Text style={commonStyles.h4}>Select Type: {!!isPicture ? "Picture" : "Video"}</Text>
+          <View style={{ position: 'relative' }}>
+            <Switch
+              color={Colors.appColor1}
+              value={isPicture}
+              onValueChange={this._onToggleSwitch}
+              style={{ position: 'absolute', left: 0 }}
+            />
           </View>
         </View>
 
         <Text style={commonStyles.h3}>Select Category</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {
-            Categories.map((category, index) => {
+            this.state.categories.map((category, index) => {
               return (
-                <TouchableOpacity
+                <View
                   // onPress={() => navigate('SearchResultsScreen')}
                   key={"category-" + index} style={{ width: '50%', padding: 5 }}>
                   <CategoryCard
@@ -253,15 +269,18 @@ class AnimalUploadScreen extends Component {
                     image={category.image}
                     selected={category.selected}
                     parent="upload"
+                    index={index}
                     {...this.props}
+                    onSelect={this.onSelectCategory}
+                    selected={this.state.selectedCategory === category.label}
                   />
-                </TouchableOpacity>
+                </View>
               )
             })
           }
         </View>
-      
-      {/* <View style={{paddingVertical: 10}}>
+
+        {/* <View style={{paddingVertical: 10}}>
         <Switch
           value={this.state.isPicture}
           onValueChange={(val) => this.setState({ isPicture: val })}
@@ -288,7 +307,7 @@ class AnimalUploadScreen extends Component {
         />
       </View> */}
 
-      {/* <View style={styles.autocompleteContainer}>
+        {/* <View style={styles.autocompleteContainer}>
         <Autocomplete
           value={query}
           data={data}
@@ -305,43 +324,43 @@ class AnimalUploadScreen extends Component {
         <Input
           placeholder="City *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-          onChangeText={location => this.setState({location})}
+          onChangeText={location => this.setState({ location })}
         />
 
         <Input
           placeholder="Price *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-          onChangeText={price => this.setState({price})}
+          onChangeText={price => this.setState({ price })}
           keyboardType="numeric"
         />
 
         <Input
           placeholder="Contact Number *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-          onChangeText={contact => this.setState({contact})}
+          onChangeText={contact => this.setState({ contact })}
           keyboardType="numeric"
         />
 
         <Input
           placeholder="Weight *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-          onChangeText={weight => this.setState({weight})}
+          onChangeText={weight => this.setState({ weight })}
           keyboardType="numeric"
         />
 
-      <View style={{height: 50, width: '100%', borderBottomColor: Colors.steel, borderBottomWidth: 1}}>
-      <Picker
-        selectedValue={this.state.gender}
-        style={{height: 50, width: '100%', color: Colors.steel, fontSize: 12, marginLeft: -2}}
-        mode={"dropdown"}
-        onValueChange={(itemValue, itemIndex) =>
-          this.setState({gender: itemValue})
-        }>
-        <Picker.Item label="Gender*" value="java" />
-        <Picker.Item label="Male" value="java" />
-        <Picker.Item label="Female" value="js" />
-      </Picker>
-      </View>
+        <View style={{ height: 50, width: '100%', borderBottomColor: Colors.steel, borderBottomWidth: 1 }}>
+          <Picker
+            selectedValue={this.state.gender}
+            style={{ height: 50, width: '100%', color: Colors.steel, fontSize: 12, marginLeft: -2 }}
+            mode={"dropdown"}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({ gender: itemValue })
+            }>
+            <Picker.Item label="Gender*" value="java" />
+            <Picker.Item label="Male" value="java" />
+            <Picker.Item label="Female" value="js" />
+          </Picker>
+        </View>
 
         {/* <Input
           placeholder="Gender *"
@@ -351,11 +370,12 @@ class AnimalUploadScreen extends Component {
         <Input
           placeholder="Description"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-          onChangeText={description => this.setState({description})}
+          onChangeText={description => this.setState({ description })}
         />
 
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
+            disabled={this.state.loading}
             style={[commonStyles.buttonColored]}
             onPress={() => this.submitForm()}>
             <Text style={[commonStyles.textButton, {}]}>Upload</Text>

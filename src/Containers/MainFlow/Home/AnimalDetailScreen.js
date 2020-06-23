@@ -155,7 +155,7 @@ class EmployerDetailScreen extends Component {
                       <Text style={[commonStyles.h4]}>{'Price:'} {employer.price}/- Rs</Text>
                     </View>
                     <View style={styles.rightContainer}>
-                      <Text style={[commonStyles.h4]}>{'Wgt:'} {employer.weight} ({employer.weight.split(" ")[0] / 40} mann)</Text>
+                      <Text style={[commonStyles.h4]}>{'Wgt:'} {employer.weight} kg ({employer.weight.split(" ")[0] / 40} mann)</Text>
                     </View>
                   </View>
 
@@ -164,7 +164,7 @@ class EmployerDetailScreen extends Component {
                       <Text style={[commonStyles.h4]}>{'Animal ID: 1234'}</Text>
                     </View>
                     <View style={styles.rightContainer}>
-                      <Text style={[commonStyles.h4]}>Cell #: {employer.phone}</Text>
+                      <Text style={[commonStyles.h4]}>Cell #: {employer.contact}</Text>
                     </View>
                   </View>
 
