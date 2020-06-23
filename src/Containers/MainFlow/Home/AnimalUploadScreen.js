@@ -29,13 +29,16 @@ import Autocomplete from 'react-native-autocomplete-input';
 import { Switch } from 'react-native-paper';
 import {addBull} from "../../../Backend/Services/bullService";
 import {firebase} from "../../../Backend/firebase";
+import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import RNFetchBlob from 'react-native-fetch-blob'
 
-const Blob = RNFetchBlob.polyfill.Blob
-const fs = RNFetchBlob.fs
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-window.Blob = Blob
+// const Blob = RNFetchBlob.polyfill.Blob
+// const fs = RNFetchBlob.fs
+// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+// window.Blob = Blob
+
+const tempWindowXMLHttpRequest = window.XMLHttpRequest;
 
 const options = {
   title: 'Select Files',
@@ -103,10 +106,15 @@ class AnimalUploadScreen extends Component {
   }
 
   uploadImage(uri, mime = 'image/jpeg') {
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob
     return new Promise((resolve, reject) => {
       const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
       let uploadBlob = null
 
+      const randomName = Math.floor(Math.random() * 10000) + 1 ;
       const imageRef = firebase
           .storage()
           .ref()
@@ -173,6 +181,7 @@ class AnimalUploadScreen extends Component {
             description: description,
           }
           this.setState({ loading: true });
+          window.XMLHttpRequest = tempWindowXMLHttpRequest;
           addBull(animal)
           .then((res) => {
             console.log("###### res", res)
