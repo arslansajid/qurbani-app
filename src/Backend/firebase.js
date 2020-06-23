@@ -8,6 +8,7 @@ const config = {
     storageBucket: "qurbani-de5d5.appspot.com",
     messagingSenderId: "51408835239",
     appId: "1:51408835239:web:9f53dfdb067f4010ddc182",
+    measurementId: "G-074MDYBP11"
   };
 firebase.initializeApp(config);
 const db = firebase.firestore();
