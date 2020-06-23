@@ -63,6 +63,27 @@ class Home extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation, screenProps, navigationOptions }) => {
+    const jobsCount = navigation.getParam('jobsCount', 0);
+    return {
+      headerTitleStyle: {
+        alignSelf: 'center',
+        textAlign: 'center',
+        flex: 1,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: colors.appColor1,
+      },
+      headerStyle: {
+        elevation: 0,
+        borderWidth: 1,
+        borderColor: '#ededed',
+      },
+      headerTitle: 'Home',
+      headerRight: <View />,
+    };
+  };
+
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
   };

@@ -27,7 +27,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 // import ImagePicker from 'react-native-image-crop-picker';
 // import { Switch } from 'react-native-switch';
 import { Switch } from 'react-native-paper';
-import { addBull } from "../../../Backend/Services/bullService";
+import { addBull, addSaand, addCamel, addBakra, addSheep, addDumba } from "../../../Backend/Services/bullService";
 import { firebase } from "../../../Backend/firebase";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
@@ -193,6 +193,16 @@ class AnimalUploadScreen extends Component {
 
       if (selectedCategory === "Bull") {
         this.createBull(animal)
+      } else if(selectedCategory === "Saand") {
+        this.createSaand(animal)
+      } else if(selectedCategory === "Camel") {
+        this.createCamel(animal)
+      } else if(selectedCategory === "Bakra") {
+        this.createBakra(animal)
+      } else if(selectedCategory === "Sheep") {
+        this.createSheep(animal)
+      } else if(selectedCategory === "Dumba") {
+        this.createDumba(animal)
       }
     } else {
       alert('Some mandatory field(s) are missing!')
@@ -201,6 +211,71 @@ class AnimalUploadScreen extends Component {
 
   createBull = (animal) => {
     addBull(animal)
+      .then(() => {
+        alert("Animal Added Successfully!")
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        console.log("###### err", err)
+        alert("Error Adding Animal!")
+        this.setState({ loading: false });
+      })
+  }
+
+  createSaand = (animal) => {
+    addSaand(animal)
+      .then(() => {
+        alert("Animal Added Successfully!")
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        console.log("###### err", err)
+        alert("Error Adding Animal!")
+        this.setState({ loading: false });
+      })
+  }
+
+  createCamel = (animal) => {
+    addCamel(animal)
+      .then(() => {
+        alert("Animal Added Successfully!")
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        console.log("###### err", err)
+        alert("Error Adding Animal!")
+        this.setState({ loading: false });
+      })
+  }
+
+  createBakra = (animal) => {
+    addBakra(animal)
+      .then(() => {
+        alert("Animal Added Successfully!")
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        console.log("###### err", err)
+        alert("Error Adding Animal!")
+        this.setState({ loading: false });
+      })
+  }
+
+  createSheep = (animal) => {
+    addSheep(animal)
+      .then(() => {
+        alert("Animal Added Successfully!")
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        console.log("###### err", err)
+        alert("Error Adding Animal!")
+        this.setState({ loading: false });
+      })
+  }
+
+  createDumba = (animal) => {
+    addDumba(animal)
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
@@ -376,7 +451,7 @@ class AnimalUploadScreen extends Component {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             disabled={this.state.loading}
-            style={[commonStyles.buttonColored]}
+            style={[commonStyles.buttonColored, this.state.loading ? commonStyles.disabled : {}]}
             onPress={() => this.submitForm()}>
             <Text style={[commonStyles.textButton, {}]}>Upload</Text>
             {this.state.loading ? (

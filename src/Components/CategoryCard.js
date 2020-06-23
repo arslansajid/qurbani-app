@@ -1,12 +1,14 @@
 
 import * as React from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { totalSize, width, height } from "react-native-dimension"
 import colors from '../Themes/Colors';
 import {Icon} from 'react-native-elements';
 import {setCategory} from '../redux/actions/CandidateFiltersActions';
-  import {connect} from 'react-redux';
+import {connect} from 'react-redux';
+import commonStyles from '../Containers/Styles/commonStyles';
+import Styles from '../Containers/GalleryScreens/styles/GalleryScreenStyles';
 
 const CategoryCard = (props) => {
     const { title, image, navigation, parent, onSelect, selected, index } = props;
@@ -34,15 +36,33 @@ const CategoryCard = (props) => {
         }
         <TouchableOpacity
             onPress={() => parent === "upload" ? onSelect(title) : onCardSelect(title) }
-            style={{ width: '100%', zIndex: 1, marginBottom: height(1)}}>
-            <Card.Cover resizeMode={"cover"} style={{ height: totalSize(15), zIndex: 1 }} source={image} />
+            style={styles.cardContainer}>
+            <Card.Cover resizeMode={"cover"} style={{ height: parent === "upload" ? totalSize(12) : totalSize(15), zIndex: 1 }} source={image} />
             <Card.Content style={{paddingBottom: 0, paddingHorizontal: 0}}>
                 {/* <Title style={{textAlign: 'center'}}>{title}</Title> */}
-                <Text style={{textAlign: 'center'}}>{title}</Text>
+                <Text style={[{textAlign: 'center', marginVertical: 3}, commonStyles.h4, commonStyles.bold]}>{title}</Text>
             </Card.Content>
         </TouchableOpacity>
         </>
     )
 };
+
+const styles = StyleSheet.create({
+    cardContainer: {
+        width: '100%',
+        zIndex: 1,
+        marginBottom: height(1),
+        // borderWidth: 1,
+        // elevation: 2,
+        // shadowOffset: {width: 1, height: 1},
+        // shadowColor: "#ededed",
+        // shadowOpacity: 0.1,
+        // borderWidth: 1,
+        // borderColor: colors.steel,
+        // borderRadius: 5,
+        // overflow: 'hidden'
+    }
+})
+
 
 export default connect(null)(CategoryCard);

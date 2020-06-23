@@ -59,6 +59,9 @@ export default StyleSheet.create({
   bold: {
     fontWeight: 'bold',
   },
+  disabled: {
+    opacity: 0.5
+  },
   logoStyle: {
     height: totalSize(30),
     width: totalSize(30),

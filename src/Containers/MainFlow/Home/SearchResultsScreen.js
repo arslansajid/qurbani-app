@@ -14,7 +14,7 @@ import ScreenTitle from '../../../Components/ScreenTitle';
 import { Icon } from 'react-native-elements';
 import { FavoriteJobsProvider } from '../../../Context/FavoriteJobsContext';
 import {Animals} from "../../../Api/static/data"
-import {getBulls} from "../../../Backend/Services/bullService";
+import {getBulls, getSaands, getCamels, getBakras, getSheeps, getDumbas} from "../../../Backend/Services/bullService";
 
 class SearchResultsScreen extends Component {
   constructor(props) {
@@ -68,7 +68,86 @@ class SearchResultsScreen extends Component {
     })
     getBulls()
     .then((res) => {
-      console.log("########### res", res)
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+      this.setState({ loading: false });
+    })
+  }
+
+  fetchSaands = () => {
+    this.setState({
+      loading: true
+    })
+    getSaands()
+    .then((res) => {
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+      this.setState({ loading: false });
+    })
+  }
+
+  fetchCamels = () => {
+    this.setState({
+      loading: true
+    })
+    getCamels()
+    .then((res) => {
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+      this.setState({ loading: false });
+    })
+  }
+
+  fetchBakras = () => {
+    this.setState({
+      loading: true
+    })
+    getBakras()
+    .then((res) => {
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+      this.setState({ loading: false });
+    })
+  }
+
+  fetchSheeps = () => {
+    this.setState({
+      loading: true
+    })
+    getSheeps()
+    .then((res) => {
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+      this.setState({ loading: false });
+    })
+  }
+
+  fetchDumbas = () => {
+    this.setState({
+      loading: true
+    })
+    getDumbas()
+    .then((res) => {
       const jobs = [...res];
       this.setState({ jobs, loading: false });
       this.updateScreenHeader(jobs);
@@ -89,6 +168,16 @@ class SearchResultsScreen extends Component {
 
     if(this.props.selectedCategory === "Bull") {
       this.fetchBulls();
+    } else if(this.props.selectedCategory === "Saand") {
+      this.fetchSaands();
+    } else if(this.props.selectedCategory === "Camel") {
+      this.fetchCamels();
+    } else if(this.props.selectedCategory === "Bakra") {
+      this.fetchBakras();
+    } else if(this.props.selectedCategory === "Sheep") {
+      this.fetchSheeps();
+    } else if(this.props.selectedCategory === "Dumba") {
+      this.fetchDumbas();
     }
   }
 
@@ -140,7 +229,7 @@ class SearchResultsScreen extends Component {
   renderPlaceHolders = () => {
     if(this.state.loading) {
     return (
-      [...Array(4)].map((e, index) => {
+      [...Array(6)].map((e, index) => {
         return (
           <View key={index}>
             <JobCardPlaceHolder />

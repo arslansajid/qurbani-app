@@ -36,7 +36,7 @@ const EmployerCard = props => {
                 onPress={() => setFavorite(!isFavorite)}
               />
             </View> */}
-                <Text style={commonStyles.h5}>
+                <Text style={[commonStyles.h4, commonStyles.bold]}>
                   Price: {props.price}/- Rs
                 </Text>
                 <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
