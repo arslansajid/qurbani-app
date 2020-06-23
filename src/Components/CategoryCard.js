@@ -5,6 +5,8 @@ import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { totalSize, width, height } from "react-native-dimension"
 import colors from '../Themes/Colors';
 import {Icon} from 'react-native-elements';
+import {setCategory} from '../redux/actions/CandidateFiltersActions';
+  import {connect} from 'react-redux';
 
 const CategoryCard = (props) => {
     const { title, image, navigation, parent } = props;
@@ -13,6 +15,12 @@ const CategoryCard = (props) => {
 
     const selectCard = () => {
         setSelected(!selected);
+    }
+
+    const onCardSelect = (value) => {
+        console.log("########### seleted value", value)
+        props.dispatch(setCategory(value));
+        navigate('SearchResultsScreen');
     }
     return (
         <>
@@ -30,7 +38,7 @@ const CategoryCard = (props) => {
             )
         }
         <TouchableOpacity
-            onPress={() => parent === "upload" ? selectCard() : navigate('SearchResultsScreen')}
+            onPress={() => parent === "upload" ? selectCard() : onCardSelect(title) }
             style={{ width: '100%', zIndex: 1, marginBottom: height(1)}}>
             <Card.Cover resizeMode={"cover"} style={{ height: totalSize(15), zIndex: 1 }} source={image} />
             <Card.Content style={{paddingBottom: 0, paddingHorizontal: 0}}>
@@ -42,4 +50,4 @@ const CategoryCard = (props) => {
     )
 };
 
-export default CategoryCard;
+export default connect(null)(CategoryCard);

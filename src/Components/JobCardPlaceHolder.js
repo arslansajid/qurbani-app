@@ -8,7 +8,7 @@ import colors from '../Themes/Colors';
 const JobCard = props => {
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={[
           commonStyles.row,
           commonStyles.space_btw,
@@ -17,14 +17,22 @@ const JobCard = props => {
         <Text style={[commonStyles.h3, styles.placeHolderLine]}>
           {'                     '}
         </Text>
-      </View>
+      </View> */}
       <Text
         style={[
-          commonStyles.h5,
-          {marginTop: height(1)},
+          {height: height(20)},
           styles.placeHolderLine,
         ]}>
         {'                '}
+      </Text>
+      <View style={styles.textContainer}>
+      <Text
+        style={[
+          commonStyles.h5,
+          // {marginTop: height(1)},
+          styles.placeHolderLine,
+        ]}>
+        {'           '}
       </Text>
       <Text
         style={[
@@ -34,7 +42,8 @@ const JobCard = props => {
         ]}>
         {'           '}
       </Text>
-      <View
+      </View>
+      {/* <View
         style={[
           commonStyles.row,
           commonStyles.space_btw,
@@ -48,14 +57,14 @@ const JobCard = props => {
         <View style={styles.applyBtn}>
           <Text style={styles.applyBtnText}>{'          '}</Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: height(3),
+    marginTop: height(1.5),
     //ios shadow styles
     elevation: 2,
     shadowOffset: {width: 1, height: 3},
@@ -64,8 +73,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.steel,
     backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 5,
+    // borderRadius: 5,
+    width: width(50),
+  },
+  textContainer: {
+    padding: 10,
   },
   applyBtn: {
     backgroundColor: colors.borderColor,

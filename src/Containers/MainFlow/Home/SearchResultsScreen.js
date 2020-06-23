@@ -22,6 +22,7 @@ class SearchResultsScreen extends Component {
     this.state = {
       jobs: [],
       favoriteJobs: [],
+      loading: false
     };
   }
 
@@ -61,22 +62,34 @@ class SearchResultsScreen extends Component {
     };
   };
 
-  async componentDidMount() {
-    // const jobs = await getJobsByUserId(/* this.props.selectedCategory.id */);
-    // console.log('jobs', jobs);
+  fetchBulls = () => {
+    this.setState({
+      loading: true
+    })
     getBulls()
     .then((res) => {
       console.log("########### res", res)
       const jobs = [...res];
-      this.setState({ jobs });
+      this.setState({ jobs, loading: false });
       this.updateScreenHeader(jobs);
     })
     .catch((err) => {
       console.log("########### err", err)
+      this.setState({ loading: false });
     })
+  }
+
+  async componentDidMount() {
+    // const jobs = await getJobsByUserId(/* this.props.selectedCategory.id */);
+    // console.log('jobs', jobs);
+    
     // const jobs = [...Animals];
     // this.setState({ jobs });
     // this.updateScreenHeader(jobs);
+
+    if(this.props.selectedCategory === "Bull") {
+      this.fetchBulls();
+    }
   }
 
   updateFavoriteJobs = job => {
@@ -125,6 +138,7 @@ class SearchResultsScreen extends Component {
   };
 
   renderPlaceHolders = () => {
+    if(this.state.loading) {
     return (
       [...Array(4)].map((e, index) => {
         return (
@@ -134,6 +148,13 @@ class SearchResultsScreen extends Component {
         )
       })
     )
+    } else {
+      return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={commonStyles.h4}>No animal in this category found!</Text>
+        </View>
+      )
+    }
   }
 
   render() {
@@ -162,7 +183,7 @@ class SearchResultsScreen extends Component {
                   companyName={item.companyName}
                   jobCity={item.location}
                   navigate={navigate}
-                  job={item}
+                  animal={item}
                 />
               )}
               keyExtractor={item => item.id}

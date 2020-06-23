@@ -114,7 +114,6 @@ class AnimalUploadScreen extends Component {
       const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
       let uploadBlob = null
 
-      const randomName = Math.floor(Math.random() * 10000) + 1 ;
       const imageRef = firebase
           .storage()
           .ref()
@@ -168,6 +167,8 @@ class AnimalUploadScreen extends Component {
   submitForm = async () => {
     const {location, price, contact, weight, gender, description, image } = this.state;
 
+    this.setState({ loading: true });
+
     const downloadUrl = await this.uploadImage(image)
     console.log("downloadUrl", downloadUrl)
 
@@ -180,7 +181,7 @@ class AnimalUploadScreen extends Component {
             gender: gender,
             description: description,
           }
-          this.setState({ loading: true });
+          
           window.XMLHttpRequest = tempWindowXMLHttpRequest;
           addBull(animal)
           .then((res) => {
@@ -205,7 +206,7 @@ class AnimalUploadScreen extends Component {
       <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
           onPress={() => this.showImagePicker()}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: Colors.appColor1, paddingVertical: 20, marginBottom: 5, borderRadius: 7 }}>
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: Colors.appColor1, marginBottom: 5, borderRadius: 7, minHeight: 175 }}>
           <Icon
             name="camera"
             type="material-community"
@@ -227,6 +228,19 @@ class AnimalUploadScreen extends Component {
               <Image source={this.state.avatarSource} style={styles.uploadAvatar} />
             )
         }
+        <View style={{minHeight: 60}}>
+          <Text style={commonStyles.h4}>Select Type: {!!isPicture ? "Picture" : "Video" }</Text>
+          <View style={{position: 'relative'}}>
+          <Switch
+            color={Colors.appColor1}
+            value={isPicture}
+            onValueChange={this._onToggleSwitch}
+            style={{position: 'absolute', left: 0}}
+          />
+          </View>
+        </View>
+
+        <Text style={commonStyles.h3}>Select Category</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {
             Categories.map((category, index) => {
@@ -273,18 +287,6 @@ class AnimalUploadScreen extends Component {
           switchWidthMultiplier={2} // multipled by the `circleSize` prop to calculate total width of the Switch
         />
       </View> */}
-
-      <View style={{minHeight: 50}}>
-      <Text style={commonStyles.h4}>Select Type: {!!isPicture ? "Picture" : "Video" }</Text>
-      <View style={{position: 'relative'}}>
-      <Switch
-        color={Colors.appColor1}
-        value={isPicture}
-        onValueChange={this._onToggleSwitch}
-        style={{position: 'absolute', left: 0}}
-      />
-      </View>
-      </View>
 
       {/* <View style={styles.autocompleteContainer}>
         <Autocomplete

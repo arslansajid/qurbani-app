@@ -55,17 +55,19 @@ class EmployerDetailScreen extends Component {
     // const employerId = '85dfad03-ee10-4b3f-9765-1cfd550db70e';
     // let employer = await getEmployerDetailById(employerId);
     // employer = employer.attributes;
-    const animal = {
-      id: 3,
-      label: 'Shakeel',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hausziege_04.jpg/1200px-Hausziege_04.jpg',
-      weight: '140 kg',
-      location: 'Islamabad',
-      price: '1,00,000',
-      phone: '0321-6375414',
-      datePosted: '12-April-2019',
-      description: 'Very healthy and beautiful animal in white color.'
-    }
+
+    const animal = this.props.navigation.getParam('selectedAnimal');
+    // const animal = {
+    //   id: 3,
+    //   label: 'Shakeel',
+    //   image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hausziege_04.jpg/1200px-Hausziege_04.jpg',
+    //   weight: '140 kg',
+    //   location: 'Islamabad',
+    //   price: '1,00,000',
+    //   phone: '0321-6375414',
+    //   datePosted: '12-April-2019',
+    //   description: 'Very healthy and beautiful animal in white color.'
+    // }
     this.setState({ employer: animal });
   }
 

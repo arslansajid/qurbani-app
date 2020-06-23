@@ -7,10 +7,9 @@ import colors from '../Themes/Colors';
 import images from '../Themes/Images';
 
 const EmployerCard = props => {
-  const [isFavorite, setFavorite] = useState(false);
   return (
     <TouchableOpacity onPress={() => props.navigate('AnimalDetailScreen', {
-      employerId: props.id
+      selectedAnimal: props.animal
     })}>
       <View style={styles.container}>
         <View style={styles.card}>
@@ -72,10 +71,10 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: height(1.5),
     //ios shadow styles
-    // elevation: 2,
-    // shadowOffset: { width: 1, height: 3 },
-    // shadowColor: '#d8d8d8',
-    // shadowOpacity: 0.5,
+    elevation: 2,
+    shadowOffset: { width: 1, height: 3 },
+    shadowColor: '#d8d8d8',
+    shadowOpacity: 0.5,
     borderWidth: 1,
     borderColor: colors.steel,
     backgroundColor: 'white',
