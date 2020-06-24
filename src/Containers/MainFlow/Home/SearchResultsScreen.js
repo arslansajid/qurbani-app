@@ -265,7 +265,7 @@ class SearchResultsScreen extends Component {
               renderItem={({ item }) => (
                 <AnimalCard
                   title={item.label}
-                  image={item.image}
+                  image={item.image[0]}
                   price={item.price}
                   weight={item.weight}
                   categoryName={item.categoryName}

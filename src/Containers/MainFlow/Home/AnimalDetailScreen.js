@@ -87,7 +87,7 @@ class EmployerDetailScreen extends Component {
       >
         <Image
           source={{
-            uri: item.image,
+            uri: item,
           }}
           style={styles.image}
           resizeMode={"cover"}
@@ -109,7 +109,7 @@ class EmployerDetailScreen extends Component {
                   ref={c => (this._carousel = c)}
                   initialNumToRender={2}
                   windowSize={2}
-                  data={this.state.images}
+                  data={employer.image}
                   renderItem={this._renderItem}
                   sliderWidth={SCREEN_WIDTH}
                   itemWidth={SCREEN_WIDTH - 20}

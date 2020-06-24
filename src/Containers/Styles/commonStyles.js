@@ -113,6 +113,16 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonModalBordered: {
+    height: height(7),
+    width: width(60),
+    borderWidth: 2,
+    borderColor: colors.appColor1,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: height(3)
+  },
   buttonBordered: {
     height: height(7),
     width: width(80),
