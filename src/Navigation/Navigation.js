@@ -21,6 +21,7 @@ import ScrollableGalleryScreen from "../Containers/GalleryScreens/ScrollableGall
 import FullscreenGalleryScreen from "../Containers/GalleryScreens/FullscreenGalleryScreen";
 import EmployersListScreen from '../Containers/MainFlow/Home/EmployersListScreen';
 import Notification from '../Containers/MainFlow/Notifications/Notification';
+import Footer from "../Components/Footer";
 import Profile from '../Containers/MainFlow/Profile/Profile';
 import colors from '../Themes/Colors';
 import {Icon} from 'react-native-elements';
@@ -120,6 +121,9 @@ const MainAppTab = createBottomTabNavigator(
           ),
       },
     },
+  },
+  {
+    tabBarComponent: props => <Footer {...props} />
   },
   {
     tabBarOptions: {

@@ -24,7 +24,7 @@ import { Icon } from 'react-native-elements';
 import { Cities, Categories } from "../../../Api/static/data"
 import ImagePicker from 'react-native-image-picker';
 import Autocomplete from 'react-native-autocomplete-input';
-// import ImagePicker from 'react-native-image-crop-picker';
+import ImageCropPicker from 'react-native-image-crop-picker';
 // import { Switch } from 'react-native-switch';
 import { Switch } from 'react-native-paper';
 import { addBull, addSaand, addCamel, addBakra, addSheep, addDumba } from "../../../Backend/Services/bullService";
@@ -32,12 +32,8 @@ import { firebase } from "../../../Backend/firebase";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import RNFetchBlob from 'react-native-fetch-blob'
-import { Bull } from '../../../Backend/Models/bull';
-
-// const Blob = RNFetchBlob.polyfill.Blob
-// const fs = RNFetchBlob.fs
-// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-// window.Blob = Blob
+import colors from '../../../Themes/Colors';
+import { Overlay } from 'react-native-elements';
 
 const tempWindowXMLHttpRequest = window.XMLHttpRequest;
 
@@ -61,54 +57,69 @@ class AnimalUploadScreen extends Component {
       isPicture: true,
       query: "",
       data: [...Cities],
-      gender: "Male",
+      gender: null,
       imageUrl: '',
       selectedCategory: null,
-      categories: [...Categories]
+      categories: [...Categories],
+      showImagePickerAlert: false,
+      images: [],
+      imageFilesArray: [],
+      visible: false
     };
     this.arrayholder = [...Cities];
+    this.picker = React.createRef()
   }
 
-
+  toggleOverlay = () => {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
 
   onSelectCategory = (value) => {
     this.setState({ selectedCategory: value })
   }
 
-  showImagePicker = () => {
-    // ImagePicker.openPicker({
-    //   includeBase64: true, // for base 64 string
-    //   multiple: true,// To support multiple image selection
-    //   quality: 1.0,
-    //   maxWidth: 200,
-    //   maxHeight: 200,
-    // }).then(image => {
-    //   for (i = 0; i < image.length; i++) {
-    //     this.state.images.push(image[i].data)//image[i].data=>base64 string
-    //   }
-    // })
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const image = response.uri;
-
-        // You can also display the image using data:
-        const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-          avatarSource: source,
-          image
-        });
-      }
-    });
+  toggleImagePickerAlert = () => {
+    this.setState({
+      showImagePickerAlert: !this.state.showImagePickerAlert
+    })
   }
+
+  // showImagePicker = () => {
+  //   // ImagePicker.openPicker({
+  //   //   includeBase64: true, // for base 64 string
+  //   //   multiple: true,// To support multiple image selection
+  //   //   quality: 1.0,
+  //   //   maxWidth: 200,
+  //   //   maxHeight: 200,
+  //   // }).then(image => {
+  //   //   for (i = 0; i < image.length; i++) {
+  //   //     this.state.images.push(image[i].data)//image[i].data=>base64 string
+  //   //   }
+  //   // })
+  //   ImagePicker.showImagePicker(options, (response) => {
+  //     console.log('Response = ', response);
+
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePicker Error: ', response.error);
+  //     } else if (response.customButton) {
+  //       console.log('User tapped custom button: ', response.customButton);
+  //     } else {
+  //       const image = response.uri;
+
+  //       // You can also display the image using data:
+  //       const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+  //       this.setState({
+  //         avatarSource: source,
+  //         image
+  //       });
+  //     }
+  //   });
+  // }
 
   uploadImage(uri, mime = 'image/jpeg') {
     const Blob = RNFetchBlob.polyfill.Blob
@@ -170,17 +181,31 @@ class AnimalUploadScreen extends Component {
   };
 
   submitForm = async () => {
-    const { location, price, contact, weight, gender, description, image, selectedCategory } = this.state;
+    const { location, price, contact, weight, gender, description, image, selectedCategory, imageFilesArray } = this.state;
 
-    if (!!location && price && contact && weight && gender && description && image && selectedCategory) {
+    if (!!location && price && contact && weight && gender && description && imageFilesArray && selectedCategory) {
 
       this.setState({ loading: true });
 
-      const downloadUrl = await this.uploadImage(image)
-      console.log("downloadUrl", downloadUrl)
+      // const downloadUrl = await this.uploadImage(image)
+
+      let imagesArray = [];
+      for await (const image of imageFilesArray) {
+        console.log("#####", image);
+
+        let imageFile = image[0];
+        let imageUri;
+
+        if (imageFile) {
+          imageUri = await this.uploadImage(image)
+        }
+        imagesArray.push(imageUri)
+      }
+
+      console.log("downloadUrl", imagesArray)
 
       const animal = {
-        image: downloadUrl,
+        image: imagesArray,
         location: location,
         price: price,
         contact: contact,
@@ -193,15 +218,15 @@ class AnimalUploadScreen extends Component {
 
       if (selectedCategory === "Bull") {
         this.createBull(animal)
-      } else if(selectedCategory === "Saand") {
+      } else if (selectedCategory === "Saand") {
         this.createSaand(animal)
-      } else if(selectedCategory === "Camel") {
+      } else if (selectedCategory === "Camel") {
         this.createCamel(animal)
-      } else if(selectedCategory === "Bakra") {
+      } else if (selectedCategory === "Bakra") {
         this.createBakra(animal)
-      } else if(selectedCategory === "Sheep") {
+      } else if (selectedCategory === "Sheep") {
         this.createSheep(animal)
-      } else if(selectedCategory === "Dumba") {
+      } else if (selectedCategory === "Dumba") {
         this.createDumba(animal)
       }
     } else {
@@ -287,17 +312,79 @@ class AnimalUploadScreen extends Component {
       })
   }
 
+  imagePickerAlertHandler = (itemValue, itemIndex) => {
+    this.toggleOverlay();
+    if (itemValue === 'gallery') {
+      if (this.state.isPicture) {
+        ImageCropPicker.openPicker({
+          multiple: true,
+          includeBase64: true,
+          cropping: true,
+        }).then(images => {
+          console.log("##############", images)
+          let arr = [...this.state.images]
+          let filesArray = [...this.state.imageFilesArray]
+          for (let i = 0; i < images.length; i++) {
+            arr.push({ uri: 'data:image/jpeg;base64,' + images[i].data })//image[i].data=>base64 string
+            filesArray.push(images[i].path)
+          }
+          this.setState({ images: [...arr], imageFilesArray: [...filesArray] })
+        });
+      } else {
+        ImageCropPicker.openPicker({
+          mediaType: "video",
+        }).then((video) => {
+          console.log(video);
+        });
+      }
+    } else if (itemValue === 'camera') {
+      if (this.state.isPicture) {
+        ImageCropPicker.openCamera({
+          width: 300,
+          height: 400,
+          cropping: true,
+          // includeBase64: true,
+        }).then(image => {
+          console.log(image);
+        });
+      } else {
+        ImageCropPicker.openCamera({
+          mediaType: 'video',
+        }).then(image => {
+          console.log(image);
+        });
+      }
+    }
+  }
+
+  selectMediaCategory = value => {
+    this.setState({ isPicture: value });
+  };
+
   render() {
     const { selectedCity, selectedCategory } = this.props;
     const navigate = this.props.navigation.navigate;
-    const { query, data, isPicture } = this.state;
+    const { query, data, isPicture, gender, visible } = this.state;
     // const data = this.searchFilterFunction(query);
     console.log("###### STATE", this.state)
     return (
       <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false}>
+        <Overlay height={200} isVisible={visible} onBackdropPress={() => this.toggleOverlay()}>
+          <View style={[commonStyles.align_center, { justifyContent: 'center', flex: 1 }]}>
+            <TouchableOpacity style={[commonStyles.buttonModalBordered]} onPress={() => this.imagePickerAlertHandler('camera')}>
+              <Text style={commonStyles.h4}>Open Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[commonStyles.buttonModalBordered]} onPress={() => this.imagePickerAlertHandler('gallery')}>
+              <Text style={commonStyles.h4}>Select from Gallery</Text>
+            </TouchableOpacity>
+          </View>
+        </Overlay>
+
         <TouchableOpacity
-          onPress={() => this.showImagePicker()}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: Colors.appColor1, marginBottom: 5, borderRadius: 7, minHeight: 175 }}>
+          onPress={() => {
+            this.toggleOverlay()
+          }}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: Colors.appColor1, borderRadius: 7, minHeight: 175 }}>
           <Icon
             name="camera"
             type="material-community"
@@ -305,31 +392,53 @@ class AnimalUploadScreen extends Component {
             size={totalSize(5)}
           // iconStyle={{marginRight: width(10)}}
           />
-          <Text style={[commonStyles.h4]}>Select pictures</Text>
+          <Text style={commonStyles.h4}>Upload {!!isPicture ? "Picture" : "Video"}</Text>
         </TouchableOpacity>
-        {
-          !!this.state.images && this.state.images.length >= 1 && this.state.images.map((image, index) => {
-            return (
-              <Image key={index} source={image} style={styles.uploadAvatar} />
-            )
-          })
-        }
+
         {
           !!this.state.avatarSource && (
             <Image source={this.state.avatarSource} style={styles.uploadAvatar} />
           )
         }
-        <View style={{ minHeight: 60 }}>
-          <Text style={commonStyles.h4}>Select Type: {!!isPicture ? "Picture" : "Video"}</Text>
-          <View style={{ position: 'relative' }}>
-            <Switch
-              color={Colors.appColor1}
-              value={isPicture}
-              onValueChange={this._onToggleSwitch}
-              style={{ position: 'absolute', left: 0 }}
-            />
-          </View>
+
+        <View style={styles.userButtonsContainer}>
+          <TouchableOpacity
+            onPress={() => this.selectMediaCategory(true)}
+            style={[
+              isPicture
+                ? [commonStyles.buttonPinkBordered, { backgroundColor: colors.appColor1 }]
+                : [commonStyles.buttonPinkBordered],
+              styles.userSelectionButton,
+            ]}>
+            <Text style={[styles.userSelectionButtonText, isPicture && { color: 'white' }]}>
+              Picture
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.selectMediaCategory(false)}
+            style={[
+              !isPicture
+                ? [commonStyles.buttonPinkBordered, { backgroundColor: colors.appColor1 }]
+                : [commonStyles.buttonPinkBordered],
+              styles.userSelectionButton,
+            ]}>
+            <Text style={[styles.userSelectionButtonText, !isPicture && { color: 'white' }]}>
+              Video
+            </Text>
+          </TouchableOpacity>
         </View>
+
+        <ScrollView
+          horizontal={true}
+        >
+          {
+            !!this.state.images && this.state.images.length >= 1 && this.state.images.map((image, index) => {
+              return (
+                <Image key={index} source={image} style={styles.uploadAvatar} />
+              )
+            })
+          }
+        </ScrollView>
 
         <Text style={commonStyles.h3}>Select Category</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -425,8 +534,8 @@ class AnimalUploadScreen extends Component {
 
         <View style={{ height: 50, width: '100%', borderBottomColor: Colors.steel, borderBottomWidth: 1 }}>
           <Picker
-            selectedValue={this.state.gender}
-            style={{ height: 50, width: '100%', color: Colors.steel, fontSize: 12, marginLeft: -2 }}
+            selectedValue={gender}
+            style={[{ height: '100%', width: '100%', fontSize: 10, marginLeft: -2 }, !!gender ? { color: 'black' } : { color: colors.steel }]}
             mode={"dropdown"}
             onValueChange={(itemValue, itemIndex) =>
               this.setState({ gender: itemValue })
@@ -436,11 +545,6 @@ class AnimalUploadScreen extends Component {
             <Picker.Item label="Female" value="js" />
           </Picker>
         </View>
-
-        {/* <Input
-          placeholder="Gender *"
-          style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-        /> */}
 
         <Input
           placeholder="Description"
@@ -546,5 +650,20 @@ const styles = StyleSheet.create({
     // justifyContent: "space-between",
     // paddingHorizontal: 24,
     // marginBottom: 24
+  },
+  userButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignSelf: 'stretch',
+    marginVertical: height(3),
+  },
+  userSelectionButton: {
+    width: width(30),
+  },
+  userSelectionButtonText: {
+    fontSize: totalSize(2),
+  },
+  center: {
+    alignItems: 'center',
   },
 });
