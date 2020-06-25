@@ -62,7 +62,7 @@ class AnimaRecommendationScreen extends Component {
       weight: '140 kg',
       location: 'Islamabad',
       price: '1,00,000',
-      phone: '+92-321-6375414',
+      phone: '0321-6375414',
       datePosted: '12-April-2019',
     }
     this.setState({ employer: animal });
@@ -95,7 +95,7 @@ class AnimaRecommendationScreen extends Component {
 
   render() {
     const navigate = this.props.navigation.navigate;
-    const { employer } = this.state;
+    const { employer, images } = this.state;
     return (
       <>
         <SafeAreaView style={{ flex: 1 }} forceInset={{ top: "never", bottom: "always" }}>
@@ -106,10 +106,10 @@ class AnimaRecommendationScreen extends Component {
                   ref={c => (this._carousel = c)}
                   initialNumToRender={2}
                   windowSize={2}
-                  data={this.state.images}
+                  data={images}
                   renderItem={this._renderItem}
                   sliderWidth={SCREEN_WIDTH}
-                  itemWidth={SCREEN_WIDTH - 50}
+                  itemWidth={SCREEN_WIDTH - 20}
                   inactiveSlideOpacity={1}
                   inactiveSlideScale={0.99}
                   useScrollView={false}
@@ -119,35 +119,22 @@ class AnimaRecommendationScreen extends Component {
                 // contentContainerCustomStyle={{width: 300}}
                 // loop={true}
                 />
-                <View style={[commonStyles.space_btw, commonStyles.row, styles.detailsContainer]}>
-                  <Text style={[commonStyles.h3, styles.textRow]}>{employer.label}</Text>
-                
-                {/* <Rating
-                  count={5}
-                  startingValue={4}
-                  style={{ paddingVertical: 10 }}
-                  isDisabled={true}
-                  ratingColor={colors.appColor}
-                  imageSize={25}
-                  ratingColor={colors.appColor}
-                  ratingBackgroundColor='#c8c7c8'
-                /> */}
+                <View style={[commonStyles.space_btw, commonStyles.row, commonStyles.align_center, styles.detailsContainer]}>
+                  <Text style={[commonStyles.h3]}>{employer.label}</Text>
                 <StarRating
                   disabled={true}
                   maxStars={5}
                   rating={4}
                   // selectedStar={(rating) => this.onStarRatingPress(rating)}
                   fullStarColor={colors.appColor1}
-                  starSize={25}
-                  containerStyle={{ paddingVertical: 10 }}
+                  starSize={totalSize(2.25)}
+                  starStyle={{paddingLeft: 3}}
                 />
                 </View>
-                
-
-                
+ 
                 {/* <Text style={[commonStyles.h5, styles.textRow]}>Date Posted: {employer.datePosted}</Text> */}
 
-                <View style={styles.locationContainer}>
+                {/* <View style={styles.locationContainer}>
                   <Icon
                     name="map-marker"
                     type="material-community"
@@ -157,32 +144,45 @@ class AnimaRecommendationScreen extends Component {
                   <Text style={[commonStyles.h4, styles.textRow]}>Location: {employer.location}, Pakistan</Text>
                   <Text style={[commonStyles.h4, styles.textRow]}>Weight: {employer.weight} (3.5 mann)</Text>
                   <Text style={[commonStyles.h4, styles.textRow]}>Price: {employer.price}/- Rs</Text>
-                </View>
+                </View> */}
+
+                <View style={[{marginTop: 10}, styles.dataContainer]}>
+                <View style={styles.detailsRow}>
+                    <View style={styles.leftContainer}>
+                      <Text style={[commonStyles.h4]}>{'Price:'} {employer.price}/- Rs</Text>
+                    </View>
+                    <View style={styles.rightContainer}>
+                      <Text style={[commonStyles.h4]}>{'Wgt:'} {employer.weight} kg ({employer.weight.split(" ")[0] / 40} mann)</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.detailsRow}>
+                    <View style={styles.leftContainer}>
+                      <Text style={[commonStyles.h4]}>{'Animal ID: 1234'}</Text>
+                    </View>
+                    <View style={styles.rightContainer}>
+                      <Text style={[commonStyles.h4]}>Cell #: {employer.phone}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.detailsRow}>
+                    <View style={styles.leftContainer}>
+                      <Text style={[commonStyles.h4]}>Gender: {'Male'}</Text>
+                    </View>
+                    <View style={styles.rightContainer}>
+                      <Text style={[commonStyles.h4]}>{employer.location}</Text>
+                    </View>
+                  </View>
+                  </View>
 
                 <View style={styles.detailsContainer}>
                   <View style={styles.separator} />
                   <View style={styles.detailsRow}>
                     <View style={styles.labelContainer}>
-                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Location'}</Text>
+                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Description'}</Text>
                     </View>
                     <View style={styles.valueContainer}>
-                      <Text style={[commonStyles.h5, styles.textRow]}>{employer.location}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.detailsRow}>
-                    <View style={styles.labelContainer}>
-                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Weight'}</Text>
-                    </View>
-                    <View style={styles.valueContainer}>
-                      <Text style={[commonStyles.h5, styles.textRow]}>{!!employer.weight ? employer.weight : "N/A"}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.detailsRow}>
-                    <View style={styles.labelContainer}>
-                      <Text style={[commonStyles.h5, commonStyles.bold, styles.textRow]}>{'Contact Number'}</Text>
-                    </View>
-                    <View style={styles.valueContainer}>
-                      <Text style={[commonStyles.h5, styles.textRow]}>{!!employer.phone ? employer.phone : "N/A"}</Text>
+                      <Text style={[commonStyles.h5, styles.textRow]}>{employer.description}</Text>
                     </View>
                   </View>
                 </View>
@@ -231,10 +231,29 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     alignSelf: 'flex-start',
-    paddingHorizontal: width(5),
+    paddingHorizontal: width(3),
     // paddingTop: width(5),
     width: '100%',
     // backgroundColor: 'green'
+  },
+  dataContainer: {
+    alignSelf: 'flex-start',
+    paddingLeft: width(3),
+    paddingRight: width(2),
+    width: '100%',
+  },
+  leftContainer: {
+    flex: 1,
+    // justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    borderColor: colors.appColor1,
+    borderRightWidth: 2
+  },
+  rightContainer: {
+    flex: 1,
+    // justifyContent: 'flex-end',
+    // alignItems: 'flex-end',
+    paddingLeft: width(2),
   },
   detailsRow: {
     flexDirection: 'row',

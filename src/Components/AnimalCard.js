@@ -39,7 +39,7 @@ const EmployerCard = props => {
                 <Text style={[commonStyles.h4, commonStyles.bold]}>
                   Price: {props.price}/- Rs
                 </Text>
-                <Text style={[commonStyles.h5, { marginTop: height(1) }]}>
+                <Text style={[commonStyles.h5, commonStyles.bold, { marginTop: height(1) }]}>
                   Weight: {props.weight} ({props.weight / 40} mann)
                 </Text>
             
@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     flex: 1,
-    padding: 10
+    paddingVertical: 10,
+    paddingHorizontal: 5
   }
 });
 
