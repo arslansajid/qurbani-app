@@ -19,14 +19,12 @@ import DropDownFilter from '../../../Components/DropDownFilter';
 import CategoryCard from '../../../Components/CategoryCard';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+// import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { Icon } from 'react-native-elements';
 import { Cities, Categories } from "../../../Api/static/data"
-import ImagePicker from 'react-native-image-picker';
-import Autocomplete from 'react-native-autocomplete-input';
+// import ImagePicker from 'react-native-image-picker';
+// import Autocomplete from 'react-native-autocomplete-input';
 import ImageCropPicker from 'react-native-image-crop-picker';
-// import { Switch } from 'react-native-switch';
-import { Switch } from 'react-native-paper';
 import { addBull, addSaand, addCamel, addBakra, addSheep, addDumba } from "../../../Backend/Services/bullService";
 import { firebase } from "../../../Backend/firebase";
 import "react-native-get-random-values";
@@ -34,6 +32,7 @@ import { v4 as uuidv4 } from 'uuid';
 import RNFetchBlob from 'react-native-fetch-blob'
 import colors from '../../../Themes/Colors';
 import { Overlay } from 'react-native-elements';
+import MultiSelect from 'react-native-multiple-select';
 
 const tempWindowXMLHttpRequest = window.XMLHttpRequest;
 
@@ -64,7 +63,8 @@ class AnimalUploadScreen extends Component {
       showImagePickerAlert: false,
       images: [],
       imageFilesArray: [],
-      visible: false
+      visible: false,
+      selectedCities: [],
     };
     this.arrayholder = [...Cities];
     this.picker = React.createRef()
@@ -181,9 +181,9 @@ class AnimalUploadScreen extends Component {
   };
 
   submitForm = async () => {
-    const { location, price, contact, weight, gender, description, image, selectedCategory, imageFilesArray } = this.state;
+    const { location, price, contact, weight, gender, description, image, selectedCategory, imageFilesArray, selectedCities } = this.state;
 
-    if (!!location && price && contact && weight && gender && description && imageFilesArray && selectedCategory) {
+    if (!!selectedCities && price && contact && weight && gender && description && imageFilesArray && selectedCategory) {
 
       this.setState({ loading: true });
 
@@ -206,7 +206,7 @@ class AnimalUploadScreen extends Component {
 
       const animal = {
         image: imagesArray,
-        location: location,
+        location: selectedCities,
         price: price,
         contact: contact,
         weight: weight,
@@ -361,11 +361,21 @@ class AnimalUploadScreen extends Component {
     this.setState({ isPicture: value });
   };
 
+  onSelectedItemsChange = (selectedItems) => {
+    this.setState({ selectedItems }, () => {
+      let arr = [];
+      this.state.selectedItems.map((item) => {
+        arr.push(this.state.data[item - 1].name);
+      })
+      this.setState({ selectedCities: [...arr] })
+    })
+  }
+
   render() {
     const { selectedCity, selectedCategory } = this.props;
     const navigate = this.props.navigation.navigate;
-    const { query, data, isPicture, gender, visible } = this.state;
-    // const data = this.searchFilterFunction(query);
+    const { data, isPicture, gender, visible, selectedItems } = this.state;
+
     console.log("###### STATE", this.state)
     return (
       <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false}>
@@ -464,52 +474,38 @@ class AnimalUploadScreen extends Component {
           }
         </View>
 
-        {/* <View style={{paddingVertical: 10}}>
-        <Switch
-          value={this.state.isPicture}
-          onValueChange={(val) => this.setState({ isPicture: val })}
-          disabled={false}
-          activeText={'On'}
-          inActiveText={'Off'}
-          circleSize={30}
-          barHeight={3}
-          circleBorderWidth={3}
-          backgroundActive={'green'}
-          backgroundInactive={'gray'}
-          circleActiveColor={'#30a566'}
-          circleInActiveColor={'#000000'}
-          changeValueImmediately={true}
-          // renderInsideCircle={() => <CustomComponent />} // custom component to render inside the Switch circle (Text, Image, etc.)
-          changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-          innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
-          outerCircleStyle={{}} // style for outer animated circle
-          renderActiveText={false}
-          renderInActiveText={false}
-          switchLeftPx={2} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-          switchRightPx={2} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-          switchWidthMultiplier={2} // multipled by the `circleSize` prop to calculate total width of the Switch
+        <View style={{ flex: 1 }}>
+        <MultiSelect
+          // hideTags
+          hideSubmitButton={true}
+          iconSearch={true}
+          items={data}
+          uniqueKey="id"
+          ref={this.picker}
+          onSelectedItemsChange={this.onSelectedItemsChange}
+          selectedItems={selectedItems}
+          selectText="Select City(s)"
+          searchInputPlaceholderText="Search Cities..."
+          onChangeInput={ (text)=> console.log(text)}
+          altFontFamily="ProximaNova-Light"
+          tagRemoveIconColor={colors.appColor1}
+          tagBorderColor={colors.appColor1}
+          tagTextColor={colors.appColor1}
+          selectedItemTextColor={colors.appColor1}
+          selectedItemIconColor={colors.appColor1}
+          itemTextColor="#000"
+          displayKey="name"
+          searchInputStyle={{ color: '#CCC' }}
+          submitButtonColor={colors.appColor1}
+          submitButtonText="Submit"
         />
-      </View> */}
+      </View>
 
-        {/* <View style={styles.autocompleteContainer}>
-        <Autocomplete
-          value={query}
-          data={data}
-          defaultValue={query}
-          onChangeText={text => this.setState({ query: text })}
-          renderItem={({ item, i }) => (
-            <TouchableOpacity onPress={() => this.setState({ query: item.label })}>
-              <Text>{item.label}</Text>
-            </TouchableOpacity>
-          )}
-        />
-        </View> */}
-
-        <Input
+        {/* <Input
           placeholder="City *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
           onChangeText={location => this.setState({ location })}
-        />
+        /> */}
 
         <Input
           placeholder="Price *"
