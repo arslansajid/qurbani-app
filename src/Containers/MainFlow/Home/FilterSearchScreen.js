@@ -121,7 +121,7 @@ class FilterSearchScreen extends Component {
           renderItem={({item}) => (
             <ListItem
               // leftAvatar={{source: {uri: `${item.image}`}}}
-              title={item ? item.label : ''}
+              title={item ? item.name : ''}
               titleStyle={styles.title}
               // subtitle={item.attributes ? item.attributes.name : ''}
               subtitleStyle={styles.subTitle}

@@ -79,7 +79,7 @@ class EmployerDetailScreen extends Component {
           if (this.props.navigation != null) {
             this.props.navigation.navigate("FullscreenGalleryScreen", {
               selectedIndex: index,
-              images: this.state.images
+              images: this.state.employer.image
             });
           }
         }}

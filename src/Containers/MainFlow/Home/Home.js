@@ -164,7 +164,7 @@ class Home extends Component {
 
         <DropDownFilter
           label={'City'}
-          value={selectedCity.label
+          value={selectedCity.name
             // Object.keys(selectedCity).length
             //   ? selectedCity.attributes.name
             //   : null
@@ -187,8 +187,8 @@ class Home extends Component {
 
               Categories.map((category, index) => {
                 return (
-                  <TouchableOpacity
-                    onPress={() => navigate('SearchResultsScreen')}
+                  <View
+                    // onPress={() => navigate('SearchResultsScreen')}
                     key={"category-" + index} style={{width: '50%', padding: 5}}>
                   <CategoryCard
                     title={category.label}
@@ -196,7 +196,7 @@ class Home extends Component {
                     selected={category.selected}
                     {...this.props}
                   />
-                  </TouchableOpacity>
+                  </View>
                 )
               })
 

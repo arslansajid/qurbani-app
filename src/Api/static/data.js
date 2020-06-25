@@ -30,22 +30,28 @@ export const Categories = [
 
 export const Cities = [
     {
-        label: 'Lahore'
+        name: 'Lahore',
+        id: 1
     },
     {
-        label: 'Karachi'
+        name: 'Karachi',
+        id: 2
     },
     {
-        label: 'Multan'
+        name: 'Multan',
+        id: 3
     },
     {
-        label: 'Faisalabad'
+        name: 'Faisalabad',
+        id: 4
     },
     {
-        label: 'Rawalpindi'
+        name: 'Rawalpindi',
+        id: 5
     },
     {
-        label: 'Islamabad'
+        name: 'Islamabad',
+        id: 6
     },
 ]
 

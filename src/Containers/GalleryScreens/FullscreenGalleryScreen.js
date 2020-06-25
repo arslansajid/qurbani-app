@@ -13,11 +13,10 @@ class ScrollableGalleryScreen extends Component {
       objImages: [],
       selectedIndex: props.navigation.getParam("selectedIndex")
     };
-
     for (let i in this.state.images) {
       this.state.objImages.push({
         source: {
-          uri: this.state.images[i].image,
+          uri: this.state.images[i],
           // headers: {
           //   Referer: Config.IMG_REFERER
           // }
