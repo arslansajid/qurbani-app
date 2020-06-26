@@ -29,6 +29,8 @@ import commonStyles from '../Containers/Styles/commonStyles';
 import Drawer from '../Components/Drawer';
 import DrawerIcon from '../Components/DrawerIcon';
 
+import {View, Image, Text} from 'react-native';
+
 const IntroStack = createStackNavigator({
   splash: {
     screen: Splash,
@@ -80,22 +82,44 @@ const MainAppTab = createBottomTabNavigator(
     AnimalUpload: {
       screen:  AnimalUploadScreen,
       navigationOptions: {
-        tabBarLabel: 'Sell',
-        tabBarIcon: ({tintColor, focused}) =>
-          focused ? (
-            <Icon
-              name="cash"
-              color={tintColor}
-              size={totalSize(3)}
-              type="material-community"
-            />
-          ) : (
-            <Icon
-              name="cash"
-              color={tintColor}
-              size={totalSize(2.5)}
-              type="material-community"
-            />
+        tabBarLabel: <Text></Text>,
+        // tabBarIcon: ({tintColor, focused}) =>
+        //   focused ? (
+        //     <Icon
+        //       name="cash"
+        //       color={tintColor}
+        //       size={totalSize(3)}
+        //       type="material-community"
+        //     />
+        //   ) : (
+        //     <Icon
+        //       name="cash"
+        //       color={tintColor}
+        //       size={totalSize(2.5)}
+        //       type="material-community"
+        //     />
+        //   ),
+          tabBarIcon: ({tintColor}) => (
+            <View
+              style={{
+                position: 'absolute',
+                bottom: -20, // space from bottombar
+                height: 65,
+                width: '100%',
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5,
+                backgroundColor: colors.appColor1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Icon
+                name="cash"
+                color={'white'}
+                size={totalSize(3)}
+                type="material-community"
+              />
+              <Text style={[commonStyles.h4, {color: 'white'}]}>Sell</Text>
+            </View>
           ),
       },
     },
@@ -122,9 +146,9 @@ const MainAppTab = createBottomTabNavigator(
       },
     },
   },
-  {
-    tabBarComponent: props => <Footer {...props} />
-  },
+  // {
+  //   tabBarComponent: props => <Footer {...props} />
+  // },
   {
     tabBarOptions: {
       activeTintColor: colors.appColor1,
