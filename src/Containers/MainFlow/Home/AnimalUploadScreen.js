@@ -55,6 +55,7 @@ class AnimalUploadScreen extends Component {
       avatarSource: null,
       isPicture: true,
       query: "",
+      weightUnit: 'kg',
       data: [...Cities],
       gender: null,
       imageUrl: '',
@@ -65,6 +66,11 @@ class AnimalUploadScreen extends Component {
       imageFilesArray: [],
       visible: false,
       selectedCities: [],
+      price: '',
+      contact: '',
+      weight: '',
+      gender: '',
+      description: '',
     };
     this.arrayholder = [...Cities];
     this.picker = React.createRef()
@@ -121,7 +127,9 @@ class AnimalUploadScreen extends Component {
   //   });
   // }
 
-  uploadImage(uri, mime = 'image/jpeg') {
+  uploadImage(uri) {
+    const {isPicture} = this.state;
+    const mime = isPicture ? 'image/jpeg' : 'video/mp4'
     const Blob = RNFetchBlob.polyfill.Blob
     const fs = RNFetchBlob.fs
     window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
@@ -130,11 +138,11 @@ class AnimalUploadScreen extends Component {
       const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
       let uploadBlob = null
 
-      const imageRef = firebase
+      const storageRef = firebase
         .storage()
         .ref()
         .child(this.state.selectedCategory)
-        .child(`${uuidv4()}.jpeg`);
+        .child(isPicture ? `${uuidv4()}.jpeg` : `${uuidv4()}.mp4`);
 
       fs.readFile(uploadUri, 'base64')
         .then((data) => {
@@ -142,11 +150,11 @@ class AnimalUploadScreen extends Component {
         })
         .then((blob) => {
           uploadBlob = blob
-          return imageRef.put(blob, { contentType: mime })
+          return storageRef.put(blob, { contentType: mime })
         })
         .then(() => {
           uploadBlob.close()
-          return imageRef.getDownloadURL()
+          return storageRef.getDownloadURL()
         })
         .then((url) => {
           resolve(url)
@@ -180,16 +188,33 @@ class AnimalUploadScreen extends Component {
     this.setState({ data: newData, query: text });
   };
 
-  submitForm = async () => {
-    const { location, price, contact, weight, gender, description, image, selectedCategory, imageFilesArray, selectedCities } = this.state;
+  clearSelection = () => {
+    this.setState({
+      selectedItems: [],
+      imageFilesArray: [],
+      images: [],
+      selectedCities: [],
+      isPicture: true,
+      weightUnit: 'kg',
+      price: '',
+      contact: '',
+      weight: '',
+      gender: '',
+      description: '',
+      selectedCategory: null,
+    })
+  }
 
-    if (!!selectedCities && price && contact && weight && gender && description && imageFilesArray && selectedCategory) {
+  submitForm = async () => {
+    const { location, price, contact, weight, gender, description, image, selectedCategory, imageFilesArray, selectedCities, weightUnit } = this.state;
+
+    if (!!selectedCities && price && contact && weight && weightUnit && gender && description && imageFilesArray && selectedCategory) {
 
       this.setState({ loading: true });
 
       // const downloadUrl = await this.uploadImage(image)
 
-      let imagesArray = [];
+      let urlsArray = [];
       for await (const image of imageFilesArray) {
         console.log("#####", image);
 
@@ -199,17 +224,17 @@ class AnimalUploadScreen extends Component {
         if (imageFile) {
           imageUri = await this.uploadImage(image)
         }
-        imagesArray.push(imageUri)
+        urlsArray.push(imageUri)
       }
 
-      console.log("downloadUrl", imagesArray)
+      console.log("downloadUrl", urlsArray)
 
       const animal = {
-        image: imagesArray,
+        image: urlsArray,
         location: selectedCities,
         price: price,
         contact: contact,
-        weight: weight,
+        weight: `${weight} ${weightUnit}`,
         gender: gender,
         description: description,
       }
@@ -239,6 +264,7 @@ class AnimalUploadScreen extends Component {
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
+        this.clearSelection();
       })
       .catch((err) => {
         console.log("###### err", err)
@@ -252,6 +278,7 @@ class AnimalUploadScreen extends Component {
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
+        this.clearSelection();
       })
       .catch((err) => {
         console.log("###### err", err)
@@ -265,6 +292,7 @@ class AnimalUploadScreen extends Component {
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
+        this.clearSelection();
       })
       .catch((err) => {
         console.log("###### err", err)
@@ -278,6 +306,7 @@ class AnimalUploadScreen extends Component {
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
+        this.clearSelection();
       })
       .catch((err) => {
         console.log("###### err", err)
@@ -291,6 +320,7 @@ class AnimalUploadScreen extends Component {
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
+        this.clearSelection();
       })
       .catch((err) => {
         console.log("###### err", err)
@@ -304,6 +334,7 @@ class AnimalUploadScreen extends Component {
       .then(() => {
         alert("Animal Added Successfully!")
         this.setState({ loading: false });
+        this.clearSelection();
       })
       .catch((err) => {
         console.log("###### err", err)
@@ -321,7 +352,6 @@ class AnimalUploadScreen extends Component {
           includeBase64: true,
           cropping: true,
         }).then(images => {
-          console.log("##############", images)
           let arr = [...this.state.images]
           let filesArray = [...this.state.imageFilesArray]
           for (let i = 0; i < images.length; i++) {
@@ -334,7 +364,9 @@ class AnimalUploadScreen extends Component {
         ImageCropPicker.openPicker({
           mediaType: "video",
         }).then((video) => {
-          console.log(video);
+          let filesArray = [...this.state.imageFilesArray]
+            filesArray.push(video.path)
+            this.setState({ imageFilesArray: [...filesArray] })
         });
       }
     } else if (itemValue === 'camera') {
@@ -343,15 +375,21 @@ class AnimalUploadScreen extends Component {
           width: 300,
           height: 400,
           cropping: true,
-          // includeBase64: true,
+          includeBase64: true,
         }).then(image => {
-          console.log(image);
+          let arr = [...this.state.images]
+          let filesArray = [...this.state.imageFilesArray]
+            arr.push({ uri: 'data:image/jpeg;base64,' + image.data })//image[i].data=>base64 string
+            filesArray.push(image.path)
+          this.setState({ images: [...arr], imageFilesArray: [...filesArray] })
         });
       } else {
         ImageCropPicker.openCamera({
           mediaType: 'video',
-        }).then(image => {
-          console.log(image);
+        }).then(video => {
+          let filesArray = [...this.state.imageFilesArray]
+            filesArray.push(video.path)
+            this.setState({ imageFilesArray: [...filesArray] })
         });
       }
     }
@@ -374,7 +412,7 @@ class AnimalUploadScreen extends Component {
   render() {
     const { selectedCity, selectedCategory } = this.props;
     const navigate = this.props.navigation.navigate;
-    const { data, isPicture, gender, visible, selectedItems } = this.state;
+    const { data, isPicture, gender, visible, selectedItems, weightUnit, imageFilesArray } = this.state;
 
     console.log("###### STATE", this.state)
     return (
@@ -403,6 +441,11 @@ class AnimalUploadScreen extends Component {
           // iconStyle={{marginRight: width(10)}}
           />
           <Text style={commonStyles.h4}>Upload {!!isPicture ? "Picture" : "Video"}</Text>
+          {
+            !isPicture && imageFilesArray.length > 0 && (
+              <Text style={commonStyles.h4}>{imageFilesArray.length} {imageFilesArray.length > 1 ? "Files" : "File" } Selected</Text>
+            )
+          }
         </TouchableOpacity>
 
         {
@@ -477,7 +520,7 @@ class AnimalUploadScreen extends Component {
         <View style={{ flex: 1 }}>
         <MultiSelect
           // hideTags
-          hideSubmitButton={true}
+          // hideSubmitButton={true}
           iconSearch={true}
           items={data}
           uniqueKey="id"
@@ -508,6 +551,7 @@ class AnimalUploadScreen extends Component {
         /> */}
 
         <Input
+          value={this.state.price}
           placeholder="Price *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
           onChangeText={price => this.setState({ price })}
@@ -515,18 +559,35 @@ class AnimalUploadScreen extends Component {
         />
 
         <Input
+          value={this.state.contact}
           placeholder="Contact Number *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
           onChangeText={contact => this.setState({ contact })}
           keyboardType="numeric"
         />
 
+        <View style={[commonStyles.row, {flex: 1, borderBottomColor: Colors.steel, borderBottomWidth: 1,}]}>
         <Input
+          value={this.state.weight}
           placeholder="Weight *"
-          style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
+          style={{ width: width(60) }}
           onChangeText={weight => this.setState({ weight })}
           keyboardType="numeric"
         />
+        <View style={{ width: width(34), alignSelf: 'flex-end' }}>
+        <Picker
+            selectedValue={weightUnit}
+            // style={[{ height: '100%', width: '100%', fontSize: 10, marginLeft: -2 }, !!gender ? { color: 'black' } : { color: colors.steel }]}
+            style={{width: '100%', fontSize: 10, marginTop: 3}}
+            mode={"dropdown"}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({ weightUnit: itemValue })
+            }>
+            <Picker.Item label="KG" value="kg" />
+            <Picker.Item label="Mann" value="mann" />
+          </Picker>
+          </View>
+        </View>
 
         <View style={{ height: 50, width: '100%', borderBottomColor: Colors.steel, borderBottomWidth: 1 }}>
           <Picker
@@ -537,12 +598,13 @@ class AnimalUploadScreen extends Component {
               this.setState({ gender: itemValue })
             }>
             <Picker.Item label="Gender*" value="java" />
-            <Picker.Item label="Male" value="java" />
-            <Picker.Item label="Female" value="js" />
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Female" value="Female" />
           </Picker>
         </View>
 
         <Input
+          value={this.state.description}
           placeholder="Description"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
           onChangeText={description => this.setState({ description })}
@@ -602,7 +664,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   buttonsContainer: {
-    marginTop: height(1),
+    marginVertical: height(3),
     alignItems: 'center',
     justifyContent: 'center',
   },
