@@ -4,7 +4,8 @@ import Navigation from './src/Navigation/Navigation';
 import {Provider} from 'react-redux';
 import store from './Store';
 import {LanguageProvider} from './src/Context/LanguageContext';
-import {NativeModules, Platform} from 'react-native';
+import {NativeModules, Platform, StatusBar} from 'react-native';
+import colors from './src/Themes/Colors';
 
 console.disableYellowBox = true;
 
@@ -34,6 +35,7 @@ class App extends Component {
             language: this.state.language,
             updateLanguage: this.updateLanguage,
           }}>
+            <StatusBar backgroundColor={colors.appColor1} barStyle='light-content' />
           <Navigation />
         </LanguageProvider>
       </Provider>
