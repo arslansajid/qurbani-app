@@ -17,13 +17,13 @@ class DropDownFilter extends Component {
   }
 
   render() {
-    const {label, value, dispatch} = this.props;
+    const {label, value, dispatch, filter} = this.props;
     return (
       <TouchableHighlight
         underlayColor="transparent"
         onPress={() => {
           this.props.navigation.navigate('FilterSearchScreen', {
-            type: label,
+            type: filter,
           });
         }}>
         <View style={commonStyles.filterContainer}>
@@ -34,7 +34,7 @@ class DropDownFilter extends Component {
             color={colors.white}
             size={totalSize(2.5)}
             onPress={
-              value && label === 'City'
+              value && filter === 'City'
                 ? () => dispatch(resetCity())
                 : () => dispatch(resetCategory())
             }

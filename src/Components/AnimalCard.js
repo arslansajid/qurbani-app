@@ -40,7 +40,7 @@ const EmployerCard = props => {
                   Price: {props.price}/- Rs
                 </Text>
                 <Text style={[commonStyles.h5, commonStyles.bold, { marginTop: height(1) }]}>
-                  Weight: {props.weight} ({props.weight / 40} mann)
+                  Weight: {props.weight}
                 </Text>
             
             {/* <Text style={[commonStyles.h5, { marginTop: height(1) }]}>

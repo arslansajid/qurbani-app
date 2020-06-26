@@ -31,7 +31,7 @@ export default class Footer extends React.Component {
                 <Icon
                   name="home-outline"
                   color={this.props.navigation.state.index === 0 ? Colors.white : Colors.steel}
-                  size={totalSize(3.25)}
+                  size={totalSize(3)}
                   type="material-community"
                 />
                 <Text style={this.props.navigation.state.index === 0 ? styles.tabSelected : styles.tab}>Buy</Text>
@@ -51,7 +51,7 @@ export default class Footer extends React.Component {
                 <Icon
                   name="cash"
                   color={this.props.navigation.state.index === 1 ? Colors.white : Colors.steel}
-                  size={totalSize(3.25)}
+                  size={totalSize(3)}
                   type="material-community"
                 />
                 <Text style={this.props.navigation.state.index === 1 ? styles.tabSelected : styles.tab}>Sell</Text>
@@ -71,7 +71,7 @@ export default class Footer extends React.Component {
                 <Icon
                   name="account"
                   color={this.props.navigation.state.index === 2 ? Colors.white : Colors.steel}
-                  size={totalSize(3.25)}
+                  size={totalSize(3)}
                   type="material-community"
                 />
                 <Text style={this.props.navigation.state.index === 2 ? styles.tabSelected : styles.tab}>Profile</Text>
@@ -87,7 +87,7 @@ export default class Footer extends React.Component {
 const styles = StyleSheet.create({
   footer: {
     backgroundColor: colors.appColor1,
-    height: 60,
+    height: 50,
     elevation: 30,
     shadowOffset: { width: 3, height: 3 },
     shadowColor: "#cbcbcb",
