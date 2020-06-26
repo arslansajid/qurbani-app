@@ -60,6 +60,7 @@ class Home extends Component {
     super(props);
     this.state = {
       selectedItems: [],
+      showError: false
     };
   }
 
@@ -87,6 +88,12 @@ class Home extends Component {
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
   };
+
+  toggleErrorState = (value) => {
+    this.setState({
+      showError: value
+    })
+  }
 
   _renderChips = () => {
     const { selectedItems } = this.state;
@@ -161,9 +168,14 @@ class Home extends Component {
               <ScrollView horizontal={true}>{this._renderChips()}</ScrollView>
             )}
         </TouchableOpacity> */}
-
+        {
+          this.state.showError && !selectedCity.name && (
+            <Text style={[commonStyles.h4, {color: 'red', position: 'absolute', top: 0}]}>Please Select City</Text>
+          )
+        }
         <DropDownFilter
-          label={'City'}
+          label={'Select City'}
+          filter={'City'}
           value={selectedCity.name
             // Object.keys(selectedCity).length
             //   ? selectedCity.attributes.name
@@ -194,6 +206,7 @@ class Home extends Component {
                     title={category.label}
                     image={category.image}
                     selected={category.selected}
+                    toggleErrorState={this.toggleErrorState}
                     {...this.props}
                   />
                   </View>
@@ -241,6 +254,7 @@ const styles = StyleSheet.create({
     padding: width(5),
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: width(6)
   },
   buttonsContainer: {
     marginTop: height(1),

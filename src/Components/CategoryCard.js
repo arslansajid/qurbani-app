@@ -11,7 +11,7 @@ import commonStyles from '../Containers/Styles/commonStyles';
 import Styles from '../Containers/GalleryScreens/styles/GalleryScreenStyles';
 
 const CategoryCard = (props) => {
-    const { title, image, navigation, parent, onSelect, selected, index } = props;
+    const { title, image, navigation, parent, onSelect, selected, index, toggleErrorState } = props;
     const navigate = navigation.navigate;
 
     const onCardSelect = (value) => {
@@ -21,7 +21,8 @@ const CategoryCard = (props) => {
             props.dispatch(setCategory(value));
             navigate('SearchResultsScreen')
         } else {
-            alert('Please Select City')
+            // alert('Please Select City')
+            toggleErrorState(true)
         }
     }
     return (
