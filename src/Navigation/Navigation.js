@@ -60,7 +60,7 @@ const MainAppTab = createBottomTabNavigator(
     Home: {
       screen: Home,
       navigationOptions: {
-        tabBarLabel: 'Home',
+        tabBarLabel: <Text style={[commonStyles.h4, {textAlign: 'center'}]}>Home</Text>,
         tabBarIcon: ({tintColor, focused}) =>
           focused ? (
             <Icon
@@ -112,13 +112,7 @@ const MainAppTab = createBottomTabNavigator(
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Icon
-                name="cash"
-                color={'white'}
-                size={totalSize(3)}
-                type="material-community"
-              />
-              <Text style={[commonStyles.h4, {color: 'white'}]}>Sell</Text>
+              <Text style={[commonStyles.h3, {color: 'white'}]}>SELL</Text>
             </View>
           ),
       },
@@ -126,7 +120,7 @@ const MainAppTab = createBottomTabNavigator(
     Profile: {
       screen: Profile,
       navigationOptions: {
-        tabBarLabel: 'Profile',
+        tabBarLabel: <Text style={[commonStyles.h4, {textAlign: 'center'}]}>Profile</Text>,
         tabBarIcon: ({tintColor, focused}) =>
           focused ? (
             <Icon
