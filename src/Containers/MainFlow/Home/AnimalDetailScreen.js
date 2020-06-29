@@ -10,12 +10,13 @@ import { ActivityIndicator } from 'react-native-paper';
 import { Icon } from 'react-native-elements';
 import QurbaniFooter from '../../../Components/QurbaniFooter';
 import images from '../../../Themes/Images';
-import Carousel from "react-native-snap-carousel";
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Swiper from "react-native-swiper";
 import { Animals } from "../../../Api/static/data"
 import { SafeAreaView } from "react-navigation";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import StarRating from 'react-native-star-rating';
+import Video from 'react-native-video';
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -24,7 +25,8 @@ class EmployerDetailScreen extends Component {
     super(props);
     this.state = {
       employer: [],
-      images: [...Animals]
+      images: [...Animals],
+      activeSlide: 0,
     };
   }
 
@@ -95,10 +97,46 @@ class EmployerDetailScreen extends Component {
       </TouchableOpacity>
     );
   };
+  
+  pagination = () => {
+    const { activeSlide, employer } = this.state;
+    return (
+        <Pagination
+          dotsLength={employer.image.length}
+          activeDotIndex={activeSlide}
+          containerStyle={{
+            // backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          position: 'absolute', zIndex: 100, width: '100%', top: 190 }}
+          dotStyle={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: 'rgba(255, 255, 255, 0.92)'
+          }}
+          inactiveDotStyle={{
+              // Define styles for inactive dots here
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: 'rgba(255, 255, 255, 0.92)'
+          }}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+        />
+    );
+}
 
   render() {
     const navigate = this.props.navigation.navigate;
     const { employer } = this.state;
+    let updatedWeight = "";
+    if(!!employer.weight) {
+      if(employer.weight.includes('mann')) {
+        updatedWeight = `${employer.weight.split(" ")[0] * 40} kg (${employer.weight})`;
+      } else {
+        updatedWeight = `${employer.weight} (${employer.weight.split(" ")[0] / 40} mann)`;
+      }
+    }
     return (
       <>
         <SafeAreaView style={{ flex: 1 }} forceInset={{ top: "never", bottom: "always" }}>
@@ -118,10 +156,25 @@ class EmployerDetailScreen extends Component {
                   useScrollView={false}
                   scrollEnabled={true}
                   layout={"default"}
+                  onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                   removeClippedSubviews={false} // https://github.com/archriss/react-native-snap-carousel/issues/238, see description of method triggerRenderingHack() on githubb docs. settin false addreses issue where carosuel is not visible on first render.
                 // contentContainerCustomStyle={{width: 300}}
                 // loop={true}
                 />
+                { this.pagination() }
+                {/* //carousel pagination */}
+
+                {/* <Video
+                  source={{uri: employer.image[0]}}   // Can be a URL or a local file.
+                  ref={(ref) => {
+                    this.player = ref
+                  }}                                      // Store reference
+                  // onBuffer={() => console.log(employer.image[0])}            // Callback when remote video is buffering
+                  // onError={() => console.log(employer.image[0])}            // Callback when video cannot be loaded
+                  style={styles.backgroundVideo}
+                /> */}
+
+
                 <View style={[commonStyles.space_btw, commonStyles.row, commonStyles.align_center, styles.detailsContainer]}>
                   <Text style={[commonStyles.h3]}>{employer.label}</Text>
                 <StarRating
@@ -155,7 +208,7 @@ class EmployerDetailScreen extends Component {
                       <Text style={[commonStyles.h4]}>{'Price:'} {employer.price}/- Rs</Text>
                     </View>
                     <View style={styles.rightContainer}>
-                      <Text style={[commonStyles.h4]}>{'Wgt:'} {employer.weight} kg ({employer.weight.split(" ")[0] / 40} mann)</Text>
+                      <Text style={[commonStyles.h4]}>{'Wgt:'} {updatedWeight}</Text>
                     </View>
                   </View>
 
@@ -370,6 +423,15 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 7,
     backgroundColor: colors.steel
+  },
+  backgroundVideo: {
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // bottom: 0,
+    // right: 0,
+    width: '100%',
+    height: 250
   },
 });
 
