@@ -17,7 +17,7 @@ class DropDownFilter extends Component {
   }
 
   render() {
-    const {label, value, dispatch, filter} = this.props;
+    const {label, value, dispatch, filter, hasError} = this.props;
     return (
       <TouchableHighlight
         underlayColor="transparent"
@@ -26,7 +26,7 @@ class DropDownFilter extends Component {
             type: filter,
           });
         }}>
-        <View style={commonStyles.filterContainer}>
+        <View style={[commonStyles.filterContainer, hasError && {borderColor: 'red', borderWidth: 2}]}>
           <Text style={commonStyles.filterText}>{value ? value : label}</Text>
           <Icon
             name={value ? 'times-circle' : 'angle-down'}
