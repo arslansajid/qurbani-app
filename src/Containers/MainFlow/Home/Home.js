@@ -181,6 +181,7 @@ class Home extends Component {
             //   ? selectedCity.attributes.name
             //   : null
           }
+          hasError={this.state.showError && !selectedCity.name}
           {...this.props}
         />
 
