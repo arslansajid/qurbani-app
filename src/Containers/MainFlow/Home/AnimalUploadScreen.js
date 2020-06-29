@@ -15,7 +15,7 @@ import { Picker } from '@react-native-community/picker';
 import { totalSize, height, width } from 'react-native-dimension';
 import commonStyles from '../../Styles/commonStyles';
 import Colors from '../../../Themes/Colors';
-import DropDownFilter from '../../../Components/DropDownFilter';
+import TextInput from '../../../Components/Input';
 import CategoryCard from '../../../Components/CategoryCard';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -71,6 +71,7 @@ class AnimalUploadScreen extends Component {
       weight: '',
       gender: '',
       description: '',
+      isValid: null,
     };
     this.arrayholder = [...Cities];
     this.picker = React.createRef()
@@ -91,41 +92,6 @@ class AnimalUploadScreen extends Component {
       showImagePickerAlert: !this.state.showImagePickerAlert
     })
   }
-
-  // showImagePicker = () => {
-  //   // ImagePicker.openPicker({
-  //   //   includeBase64: true, // for base 64 string
-  //   //   multiple: true,// To support multiple image selection
-  //   //   quality: 1.0,
-  //   //   maxWidth: 200,
-  //   //   maxHeight: 200,
-  //   // }).then(image => {
-  //   //   for (i = 0; i < image.length; i++) {
-  //   //     this.state.images.push(image[i].data)//image[i].data=>base64 string
-  //   //   }
-  //   // })
-  //   ImagePicker.showImagePicker(options, (response) => {
-  //     console.log('Response = ', response);
-
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.error) {
-  //       console.log('ImagePicker Error: ', response.error);
-  //     } else if (response.customButton) {
-  //       console.log('User tapped custom button: ', response.customButton);
-  //     } else {
-  //       const image = response.uri;
-
-  //       // You can also display the image using data:
-  //       const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-  //       this.setState({
-  //         avatarSource: source,
-  //         image
-  //       });
-  //     }
-  //   });
-  // }
 
   uploadImage(uri) {
     const {isPicture} = this.state;
@@ -206,9 +172,9 @@ class AnimalUploadScreen extends Component {
   }
 
   submitForm = async () => {
-    const { location, price, contact, weight, gender, description, image, selectedCategory, imageFilesArray, selectedCities, weightUnit } = this.state;
+    const { location, price, mobilevalidate, contact, weight, gender, description, image, selectedCategory, imageFilesArray, selectedCities, weightUnit } = this.state;
 
-    if (!!selectedCities && price && contact && weight && weightUnit && gender && description && imageFilesArray && selectedCategory) {
+    if (!!selectedCities && price && (mobilevalidate && contact) && weight && weightUnit && gender && imageFilesArray.length > 0 && selectedCategory) {
 
       this.setState({ loading: true });
 
@@ -409,14 +375,33 @@ class AnimalUploadScreen extends Component {
     })
   }
 
+  mobilevalidate = (text) => {
+    const reg = /^\d{4}-\d{7}$/;
+    if(text === "") {
+      this.setState({ isValid: null, contact: "" })
+    } else if (reg.test(text) === false) {
+      this.setState({
+        mobilevalidate: false,
+        contact: text,
+      });
+      return false;
+    } else {
+      this.setState({
+        mobilevalidate: true,
+        contact: text,
+      });
+      return true;
+    }
+  }
+
   render() {
     const { selectedCity, selectedCategory } = this.props;
     const navigate = this.props.navigation.navigate;
-    const { data, isPicture, gender, visible, selectedItems, weightUnit, imageFilesArray } = this.state;
+    const { data, isPicture, gender, visible, selectedItems, weightUnit, imageFilesArray, isValid, mobilevalidate } = this.state;
 
-    console.log("###### STATE", this.state)
+    console.log("###### STATE", this.state.contact)
     return (
-      <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
         <Overlay height={200} isVisible={visible} onBackdropPress={() => this.toggleOverlay()}>
           <View style={[commonStyles.align_center, { justifyContent: 'center', flex: 1 }]}>
             <TouchableOpacity style={[commonStyles.buttonModalBordered]} onPress={() => this.imagePickerAlertHandler('camera')}>
@@ -427,6 +412,36 @@ class AnimalUploadScreen extends Component {
             </TouchableOpacity>
           </View>
         </Overlay>
+
+        {/* <TextInput
+          placeholder="Password"
+          style={styles.input}
+          pattern={[
+            '^.{12,}$', // min 8 chars
+            // '(?=.*\\d)', // number required
+            // '(?=.*[A-Z])', // uppercase letter
+            '^\d{4}-\d{7}$',
+            // '^[0][\d]{3}-[\d]{7}$'
+          ]}
+          onValidation={isValid => this.setState({ isValid })}
+        />
+        <View>
+          <Text style={{ color: isValid && isValid[0] ? 'green' : 'red' }}>
+            Rule 1: min 8 chars
+          </Text>
+          <Text style={{ color: isValid && isValid[1] ? 'green' : 'red' }}>
+            Rule 2: number required
+          </Text>
+          <Text style={{ color: isValid && isValid[2] ? 'green' : 'red' }}>
+            Rule 3: uppercase letter
+          </Text>
+          <Text style={{ color: isValid && isValid[1] ? 'green' : 'red' }}>
+            Phone
+          </Text>
+          <Text style={{ color: isValid && isValid[1] ? 'green' : 'red' }}>
+            Phone
+          </Text>
+        </View> */}
 
         <TouchableOpacity
           onPress={() => {
@@ -454,7 +469,7 @@ class AnimalUploadScreen extends Component {
           )
         }
 
-        <View style={styles.userButtonsContainer}>
+        {/* <View style={styles.userButtonsContainer}>
           <TouchableOpacity
             onPress={() => this.selectMediaCategory(true)}
             style={[
@@ -479,7 +494,7 @@ class AnimalUploadScreen extends Component {
               Video
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <ScrollView
           horizontal={true}
@@ -562,9 +577,28 @@ class AnimalUploadScreen extends Component {
           value={this.state.contact}
           placeholder="Contact Number *"
           style={{ borderBottomColor: Colors.steel, borderBottomWidth: 1 }}
-          onChangeText={contact => this.setState({ contact })}
+          onChangeText={contact => this.mobilevalidate(contact)}
           keyboardType="numeric"
+          onBlur={() => this.setState({
+            isValid: this.state.contact.length ? true : false
+          })}
         />
+
+        {
+          isValid ?
+          mobilevalidate ?
+          <Text style={{ color: 'green' }}>
+            Verified
+          </Text>
+          :
+          <Text style={{ color: 'red' }}>
+            Invalid format
+          </Text>
+          :
+          <Text style={{ color: colors.steel }}>
+            Example: 0300-1234567
+          </Text>
+        }
 
         <View style={[commonStyles.row, {flex: 1, borderBottomColor: Colors.steel, borderBottomWidth: 1,}]}>
         <Input
@@ -723,5 +757,14 @@ const styles = StyleSheet.create({
   },
   center: {
     alignItems: 'center',
+  },
+  input: {
+    height: 48,
+    width: '80%',
+    padding: 8,
+    margin: 16,
+    borderColor: 'gray',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
   },
 });
