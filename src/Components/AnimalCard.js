@@ -7,8 +7,12 @@ import colors from '../Themes/Colors';
 import images from '../Themes/Images';
 
 const EmployerCard = props => {
-
-  const updatedWeight = props.weight.includes('mann') ? `${props.weight.split(" ")[0] * 40} kg` : props.weight
+  let updatedWeight = "";
+    if(props.weightUnit === 'kg') {
+      updatedWeight = `${props.weight} kg`;
+    } else {
+      updatedWeight = `${props.weight * 40} kg`;
+    }
   return (
     <TouchableOpacity onPress={() => props.navigate('AnimalDetailScreen', {
       selectedAnimal: props.animal

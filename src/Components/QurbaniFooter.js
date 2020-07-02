@@ -39,7 +39,7 @@ class ApplyJobFooter extends Component {
 
   render() {
     const SUPPORT_EMAIL = "support@qurbaniapp.com";
-    const SUPPORT_PHONE_NUMBER = "+92 3 111 444 100";
+    const SUPPORT_PHONE_NUMBER = this.props.contact;
     return (
       <View
         style={styles.container}

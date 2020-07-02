@@ -130,11 +130,11 @@ class EmployerDetailScreen extends Component {
     const navigate = this.props.navigation.navigate;
     const { employer } = this.state;
     let updatedWeight = "";
-    if(!!employer.weight) {
-      if(employer.weight.includes('mann')) {
-        updatedWeight = `${employer.weight.split(" ")[0] * 40} kg (${employer.weight})`;
+    if(!!employer.weightUnit) {
+      if(employer.weightUnit === 'kg') {
+        updatedWeight = `${employer.weight} kg (${employer.weight / 40} mann)`;
       } else {
-        updatedWeight = `${employer.weight} (${employer.weight.split(" ")[0] / 40} mann)`;
+        updatedWeight = `${employer.weight * 40} kg (${employer.weight} mann)`;
       }
     }
     return (
@@ -226,7 +226,9 @@ class EmployerDetailScreen extends Component {
                       <Text style={[commonStyles.h4]}>Gender: {'Male'}</Text>
                     </View>
                     <View style={styles.rightContainer}>
-                      <Text style={[commonStyles.h4]}>{employer.location}</Text>
+                      {/* <Text style={[commonStyles.h4]}>{employer.location}</Text> */}
+                      <Text style={[commonStyles.h4]}>{this.props.selectedCity.name}</Text>
+                      {/* will be chnaged later */}
                     </View>
                   </View>
                   </View>
@@ -311,7 +313,7 @@ class EmployerDetailScreen extends Component {
               </View>
             )}
           <View>
-            <QurbaniFooter title={"Follow Employer"} />
+            <QurbaniFooter contact={employer.contact} />
           </View>
         </SafeAreaView>
       </>

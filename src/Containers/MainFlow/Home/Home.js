@@ -18,7 +18,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { Icon } from 'react-native-elements';
-import {Categories} from "../../../Api/static/data"
+import {Categories} from "../../../Api/static/data";
+
 
 const items = [
   // this is the parent or 'item'

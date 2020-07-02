@@ -7,11 +7,11 @@ const images = {
   placeholder: require('../../images/placeholder.jpg'),
   avatar: require('../../images/avatar2.png'),
   bull: require('../../images/PosterImages/Bull.jpg'),
-  bakra: require('../../images/PosterImages/Bakra.jpg'),
-  saand: require('../../images/PosterImages/Saand.png'),
-  camel: require('../../images/PosterImages/Camel.png'),
-  dumba: require('../../images/PosterImages/Dumba.png'),
-  sheep: require('../../images/PosterImages/Sheep.png'),
+  bakra: require('../../images/PosterImagesmall/Bakra.png'),
+  saand: require('../../images/PosterImagesmall/Saand.png'),
+  camel: require('../../images/PosterImagesmall/Camel.png'),
+  dumba: require('../../images/PosterImagesmall/Dumba.png'),
+  sheep: require('../../images/PosterImagesmall/Sheep.png'),
 };
 
 export default images;

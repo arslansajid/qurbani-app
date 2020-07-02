@@ -14,14 +14,13 @@ import ScreenTitle from '../../../Components/ScreenTitle';
 import { Icon } from 'react-native-elements';
 import { FavoriteJobsProvider } from '../../../Context/FavoriteJobsContext';
 import {Animals} from "../../../Api/static/data"
-import {getBulls, getSaands, getCamels, getBakras, getSheeps, getDumbas} from "../../../Backend/Services/bullService";
+import {getBulls, getSaands, getCamels, getBakras, getSheeps, getDumbas, getAnimalsByCity, getAnimalsByFilter} from "../../../Backend/Services/bullService";
 
 class SearchResultsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       jobs: [],
-      favoriteJobs: [],
       loading: false
     };
   }
@@ -158,6 +157,55 @@ class SearchResultsScreen extends Component {
     })
   }
 
+  fetchAnimalsByCity = () => {
+    const {selectedCategory, selectedCity} = this.props;
+    this.setState({
+      loading: true
+    })
+    getAnimalsByCity(selectedCategory, selectedCity.name)
+    .then((res) => {
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+      this.setState({ loading: false });
+    })
+    .catch((err) => {
+      this.setState({ loading: false });
+    })
+  }
+
+  fetchAnimalsByFilter = () => {
+    const {selectedCategory, selectedCity} = this.props;
+    const {weightFilter, priceFilter} = this.state;
+    this.setState({
+      loading: true
+    })
+    getAnimalsByFilter(selectedCategory, selectedCity.name, weightFilter, priceFilter)
+    .then((res) => {
+      const jobs = [...res];
+      this.setState({ jobs, loading: false });
+      this.updateScreenHeader(jobs);
+      console.log("########### res", res)
+      this.setState({ loading: false });
+    })
+    .catch((err) => {
+      console.log("########### err", err)
+      this.setState({ loading: false });
+    })
+  }
+
+  handleWeightFilter = (value) => {
+    this.setState({ weightFilter: value }, () => {
+      this.fetchAnimalsByFilter();
+    })
+  }
+
+  handlePriceFilter = (value) => {
+    this.setState({ priceFilter: value }, () => {
+      this.fetchAnimalsByFilter();
+    })
+  }
+
   async componentDidMount() {
     // const jobs = await getJobsByUserId(/* this.props.selectedCategory.id */);
     // console.log('jobs', jobs);
@@ -165,20 +213,21 @@ class SearchResultsScreen extends Component {
     // const jobs = [...Animals];
     // this.setState({ jobs });
     // this.updateScreenHeader(jobs);
+    this.fetchAnimalsByCity();
 
-    if(this.props.selectedCategory === "Bull") {
-      this.fetchBulls();
-    } else if(this.props.selectedCategory === "Saand") {
-      this.fetchSaands();
-    } else if(this.props.selectedCategory === "Camel") {
-      this.fetchCamels();
-    } else if(this.props.selectedCategory === "Bakra") {
-      this.fetchBakras();
-    } else if(this.props.selectedCategory === "Sheep") {
-      this.fetchSheeps();
-    } else if(this.props.selectedCategory === "Dumba") {
-      this.fetchDumbas();
-    }
+    // if(this.props.selectedCategory === "Bull") {
+    //   this.fetchBulls();
+    // } else if(this.props.selectedCategory === "Saand") {
+    //   this.fetchSaands();
+    // } else if(this.props.selectedCategory === "Camel") {
+    //   this.fetchCamels();
+    // } else if(this.props.selectedCategory === "Bakra") {
+    //   this.fetchBakras();
+    // } else if(this.props.selectedCategory === "Sheep") {
+    //   this.fetchSheeps();
+    // } else if(this.props.selectedCategory === "Dumba") {
+    //   this.fetchDumbas();
+    // }
   }
 
   updateFavoriteJobs = job => {
@@ -249,9 +298,14 @@ class SearchResultsScreen extends Component {
   render() {
     const navigate = this.props.navigation.navigate;
     const { jobs } = this.state;
+    console.log("STATE ##########", this.state);
     return (
       <>
-        <TopFilters {...this.props} />
+        <TopFilters
+          weightFilterCallback={(value) => this.handleWeightFilter(value)}
+          priceFilterCallback={(value) => this.handlePriceFilter(value)}
+          {...this.props}
+        />
         <View style={styles.mainContainer}>
           <View style={styles.jobsContainer}>
             <FlatList
@@ -268,6 +322,7 @@ class SearchResultsScreen extends Component {
                   image={item.image[0]}
                   price={item.price}
                   weight={item.weight}
+                  weightUnit={item.weightUnit}
                   categoryName={item.categoryName}
                   companyName={item.companyName}
                   jobCity={item.location}

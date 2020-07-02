@@ -10,6 +10,7 @@ export class Bull {
         this.gender = x.gender;
         this.price = x.price;
         this.weight = x.weight;
+        this.weightUnit = x.weightUnit;
         this.timestampAdded = x.timestampAdded;
     }
 
@@ -28,6 +29,7 @@ export class Bull {
             gender: data['gender'] ? data['gender'] : [],
             price: data['price'] ? data['price'] : [],
             weight: data['weight'] ? data['weight'] : [],
+            weightUnit: data['weightUnit'] ? data['weightUnit'] : '',
             timestampAdded: new Date(),
         });
     }
@@ -44,6 +46,7 @@ export class Bull {
             price: x.price,
             weight: x.weight,
             timestampAdded: x.timestampAdded,
+            weightUnit: x.weightUnit,
         };
     }
 }

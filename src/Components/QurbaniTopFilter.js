@@ -23,43 +23,31 @@ class TopFilters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "Select Me Please",
-      selectedFilter: null,
       selectedPrice: null,
-      selectedWeight: "",
-      language: 'java',
-    }
-  }
-
-  onSelect(value, label) {
-    this.setState({ value: value });
-  }
-
-  toggleFilter = (selected) => {
-    if (selected === this.state.selectedFilter) {
-      this.setState({ selectedFilter: null })
-    } else {
-      this.setState({
-        selectedFilter: selected,
-      })
+      selectedWeight: null,
     }
   }
 
   render() {
-    console.log(this.state);
     let weight = [{
-      value: '40 - 80 kg (2-3 mann)',
+      label: '40 - 80 kg (2-3 mann)',
+      value: '40-80'
     }, {
-      value: '80 - 120 kg (3-4 mann)',
+      label: '80 - 120 kg (3-4 mann)',
+      value: '80-120'
     }, {
-      value: '120 - 160 kg (3-4 mann)',
+      label: '120 - 160 kg (3-4 mann)',
+      value: '120-160'
     }];
     let price = [{
-      value: '40,000 - 50,000 Rs',
+      label: '40,000 - 50,000 Rs',
+      value: '40000-50000'
     }, {
-      value: '50,000 - 60,000 Rs',
+      label: '50,000 - 60,000 Rs',
+      value: '50000-60000'
     }, {
-      value: '60,000 - 70,000 Rs'
+      label: '60,000 - 70,000 Rs',
+      value: '60000-70000'
     }];
     return (
       <>
@@ -72,14 +60,15 @@ class TopFilters extends Component {
               mode={"dropdown"}
               selectedValue={this.state.selectedWeight}
               style={styles.editBtn}
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({ selectedWeight: itemValue })
-              }>
-              <Picker.Item label="Select Weight" value="0" />
+              onValueChange={(itemValue, itemIndex) => {
+                this.setState({ selectedWeight: itemValue });
+                this.props.weightFilterCallback( itemValue === 0 ? "0-999999" : weight[itemIndex - 1].value)
+              }}>
+              <Picker.Item label="Select Weight" value={0} />
               {
                 weight.map((option, index) => {
                   return (
-                    <Picker.Item label={option.value} value={option.value} />
+                    <Picker.Item label={option.label} value={option.value} />
                   )
                 })
               }
@@ -93,14 +82,15 @@ class TopFilters extends Component {
               mode={"dropdown"}
               selectedValue={this.state.selectedPrice}
               style={styles.editBtn}
-              onValueChange={(itemValue, itemIndex) =>
+              onValueChange={(itemValue, itemIndex) => {
                 this.setState({ selectedPrice: itemValue })
-              }>
-              <Picker.Item label="Select Price" value="0" />
+                this.props.priceFilterCallback(itemValue === 0 ? "0-999999" : price[itemIndex - 1].value)
+              }}>
+              <Picker.Item label="Select Price" value={0} />
               {
                 price.map((option, index) => {
                   return (
-                    <Picker.Item label={option.value} value={option.value} />
+                    <Picker.Item label={option.label} value={option.value} />
                   )
                 })
               }

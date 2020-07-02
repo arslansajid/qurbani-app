@@ -34,6 +34,24 @@ import colors from '../../../Themes/Colors';
 import { Overlay } from 'react-native-elements';
 import MultiSelect from 'react-native-multiple-select';
 
+const imageResizeFileUri = ({ file }) => {
+  const fileUri = Platform.OS === 'ios' ? uri.replace('file://', '') : file
+    new Promise((resolve) => {
+        Resizer.imageFileResizer(
+            fileUri,
+            700,
+            700,
+            'JPEG',
+            95,
+            0,
+            (uri) => {
+                resolve(uri);
+            },
+            'base64'
+        );
+    });
+  }
+
 const tempWindowXMLHttpRequest = window.XMLHttpRequest;
 
 const options = {
@@ -168,6 +186,8 @@ class AnimalUploadScreen extends Component {
       gender: '',
       description: '',
       selectedCategory: null,
+      isValid: null,
+      mobilevalidate: null,
     })
   }
 
@@ -198,11 +218,12 @@ class AnimalUploadScreen extends Component {
       const animal = {
         image: urlsArray,
         location: selectedCities,
-        price: price,
+        price: Number(price),
         contact: contact,
-        weight: `${weight} ${weightUnit}`,
+        weight: Number(weight),
         gender: gender,
         description: description,
+        weightUnit: weightUnit,
       }
 
       window.XMLHttpRequest = tempWindowXMLHttpRequest;
@@ -314,16 +335,19 @@ class AnimalUploadScreen extends Component {
     if (itemValue === 'gallery') {
       if (this.state.isPicture) {
         ImageCropPicker.openPicker({
-          multiple: true,
+          // multiple: true,
           includeBase64: true,
           cropping: true,
+          width: 1280,
+          height: 720,
+          compressImageQuality: 0.7,
         }).then(images => {
           let arr = [...this.state.images]
           let filesArray = [...this.state.imageFilesArray]
-          for (let i = 0; i < images.length; i++) {
-            arr.push({ uri: 'data:image/jpeg;base64,' + images[i].data })//image[i].data=>base64 string
-            filesArray.push(images[i].path)
-          }
+          // for (let i = 0; i < images.length; i++) {
+            arr.push({ uri: 'data:image/jpeg;base64,' + images.data })//image[i].data=>base64 string
+            filesArray.push(images.path)
+          // }
           this.setState({ images: [...arr], imageFilesArray: [...filesArray] })
         });
       } else {
@@ -338,8 +362,7 @@ class AnimalUploadScreen extends Component {
     } else if (itemValue === 'camera') {
       if (this.state.isPicture) {
         ImageCropPicker.openCamera({
-          width: 300,
-          height: 400,
+          compressImageQuality: 0.7,
           cropping: true,
           includeBase64: true,
         }).then(image => {
@@ -377,6 +400,11 @@ class AnimalUploadScreen extends Component {
 
   mobilevalidate = (text) => {
     const reg = /^\d{4}-\d{7}$/;
+
+    if(text.length === 4 && !this.state.contact.includes("-")) {
+      text = text + "-"
+    }
+
     if(text === "") {
       this.setState({ isValid: null, contact: "" })
     } else if (reg.test(text) === false) {
@@ -399,7 +427,7 @@ class AnimalUploadScreen extends Component {
     const navigate = this.props.navigation.navigate;
     const { data, isPicture, gender, visible, selectedItems, weightUnit, imageFilesArray, isValid, mobilevalidate } = this.state;
 
-    console.log("###### STATE", this.state.contact)
+    console.log("###### STATE", this.state)
     return (
       <ScrollView contentContainerStyle={styles.mainContainer} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
         <Overlay height={200} isVisible={visible} onBackdropPress={() => this.toggleOverlay()}>
@@ -588,7 +616,7 @@ class AnimalUploadScreen extends Component {
           isValid ?
           mobilevalidate ?
           <Text style={{ color: 'green' }}>
-            Verified
+            Valid format
           </Text>
           :
           <Text style={{ color: 'red' }}>

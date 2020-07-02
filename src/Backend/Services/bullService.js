@@ -20,6 +20,50 @@ export const getBulls = async function () {
     return bulls;
 };
 
+export const getAnimalsByCity = async function (animal, city) {
+    const documentToQuery = animal.toLowerCase() + "s";
+    const query = await db
+        .collection(documentToQuery)
+        .where('location', 'array-contains', city)
+        .get();
+
+        let animals = [];
+
+        query.docs.forEach((doc) => {
+            const animal = Bull.fromFirestore(doc);
+            if (animal) {
+                animals.push(animal);
+            }
+        });
+
+        return animals;
+}
+
+export const getAnimalsByFilter = async function (animal, city, weight, price) {
+    const weightStart = !!weight ? Number(weight.split("-")[0]) : 0
+    const weightEnd = !!weight ? Number(weight.split("-")[1]) : 99999999
+    const priceStart = !!price ? Number(price.split("-")[0]) : 0
+    const priceEnd = !!price ? Number(price.split("-")[1]) : 99999999
+    const documentToQuery = animal.toLowerCase() + "s";
+    
+    const query = await db
+        .collection(documentToQuery)
+        .where('location', 'array-contains', city)
+        .where('weight', '>=', weightStart).where('weight', '<=', weightEnd)
+        .get();
+
+        let animals = [];
+
+        query.docs.forEach((doc) => {
+            const animal = Bull.fromFirestore(doc);
+            if (!!animal && animal.price >= priceStart && animal.price <= priceEnd) {
+                animals.push(animal);
+            }
+        });
+
+        return animals;
+}
+
 export const getSaands = async function () {
     const query = await db.collection('saands').limit(20).get();
 

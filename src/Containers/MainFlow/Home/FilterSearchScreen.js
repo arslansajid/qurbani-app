@@ -93,7 +93,7 @@ class FilterSearchScreen extends Component {
 
   searchFilterFunction = text => {    
     const newData = this.arrayholder.filter(item => {      
-      const itemData = `${item.label.toUpperCase()}`;
+      const itemData = `${item.name.toUpperCase()}`;
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;  
     });
