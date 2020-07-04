@@ -31,7 +31,7 @@ class TopFilters extends Component {
   render() {
     let weight = [
       {
-        abel: '< 40 kg (1 mann)',
+        label: '< 40 kg (1 mann)',
         value: '0-40'
       },
       {
@@ -44,25 +44,25 @@ class TopFilters extends Component {
         label: '120 - 160 kg (3-4 mann)',
         value: '120-160'
       }, {
-        abel: '160 - 200 kg (3-4 mann)',
+        label: '160 - 200 kg (3-4 mann)',
         value: '160-200'
       }, {
-        abel: '200 - 240 kg (3-4 mann)',
+        label: '200 - 240 kg (3-4 mann)',
         value: '200-240'
       }, {
-        abel: '240 - 280 kg (3-4 mann)',
+        label: '240 - 280 kg (3-4 mann)',
         value: '240-280'
       }, {
-        abel: '280 - 320 kg (3-4 mann)',
+        label: '280 - 320 kg (3-4 mann)',
         value: '280-320'
       }, {
-        abel: '320 - 360 kg (3-4 mann)',
+        label: '320 - 360 kg (3-4 mann)',
         value: '320-360'
       }, {
-        abel: '360 - 400 kg (3-4 mann)',
+        label: '360 - 400 kg (3-4 mann)',
         value: '360-400'
       }, {
-        abel: '> 400 kg (10 mann)',
+        label: '> 400 kg (10 mann)',
         value: '400-999999'
       },
     ];
@@ -82,40 +82,40 @@ class TopFilters extends Component {
         label: '60,000 - 80,000 Rs',
         value: '60000-80000'
       }, {
-        label: '80,000 - 1,00,0000 Rs',
+        label: '80,000 - 1,00,000 Rs',
         value: '80000-100000'
       }, {
-        label: '1,00,000 - 1,20,0000 Rs',
+        label: '1,00,000 - 1,20,000 Rs',
         value: '100000-1200000'
       }, {
-        label: '1,20,000 - 1,40,0000 Rs',
+        label: '1,20,000 - 1,40,000 Rs',
         value: '120000-1400000'
       }, {
-        label: '1,40,0000 - 1,60,0000 Rs',
+        label: '1,40,0000 - 1,60,000 Rs',
         value: '140000-1600000'
       }, {
-        label: '1,60,000 - 1,80,0000 Rs',
+        label: '1,60,000 - 1,80,000 Rs',
         value: '160000-1800000'
       }, {
-        label: '1,80,000 - 2,00,0000 Rs',
+        label: '1,80,000 - 2,00,000 Rs',
         value: '180000-2000000'
       }, {
-        label: '2,00,000 - 2,20,0000 Rs',
+        label: '2,00,000 - 2,20,000 Rs',
         value: '200000-2200000'
       }, {
-        label: '2,20,000 - 2,40,0000 Rs',
+        label: '2,20,000 - 2,40,000 Rs',
         value: '220000-2400000'
       }, {
-        label: '2,40,0000 - 2,60,0000 Rs',
+        label: '2,40,0000 - 2,60,000 Rs',
         value: '240000-2600000'
       }, {
-        label: '2,60,000 - 2,80,0000 Rs',
+        label: '2,60,000 - 2,80,000 Rs',
         value: '260000-2800000'
       }, {
-        label: '2,80,000 - 3,00,0000 Rs',
+        label: '2,80,000 - 3,00,000 Rs',
         value: '280000-3000000'
       }, {
-        label: '> 3,00,0000 Rs',
+        label: '> 3,00,000 Rs',
         value: '300000-99999999'
       },
     ];
