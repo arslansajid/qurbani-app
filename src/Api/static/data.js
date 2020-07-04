@@ -34,24 +34,96 @@ export const Cities = [
         id: 1
     },
     {
-        name: 'Karachi',
+        name: 'Islamabad',
         id: 2
     },
     {
-        name: 'Multan',
+        name: 'Rawalpindi',
         id: 3
     },
     {
-        name: 'Faisalabad',
+        name: 'Karachi',
         id: 4
     },
     {
-        name: 'Rawalpindi',
+        name: 'Peshawar',
         id: 5
     },
     {
-        name: 'Islamabad',
+        name: 'Multan',
         id: 6
+    },
+    {
+        name: ' Quetta',
+        id: 7
+    },
+    {
+        name: 'Faisalabad',
+        id: 8
+    },
+    {
+        name: 'Sialkot',
+        id: 9
+    },
+    {
+        name: 'Gujranwala',
+        id: 10
+    },
+    {
+        name: 'Jhelum',
+        id: 11
+    },
+    {
+        name: 'Jhang',
+        id: 12
+    },
+    {
+        name: 'Chakwal',
+        id: 13
+    },
+    {
+        name: 'Mianwali',
+        id: 14
+    },
+    {
+        name: 'Kasur',
+        id: 15
+    },
+    {
+        name: 'Sahiwal',
+        id: 16
+    },
+    {
+        name: 'Mardan',
+        id: 17
+    },
+    {
+        name: 'Abbottabad',
+        id: 18
+    },
+    {
+        name: 'Chaman',
+        id: 19
+    },
+    {
+        name: 'Chitral',
+        id: 20
+    },
+    {
+        name: 'Sawat',
+        id: 21
+    },
+    {
+        name: 'Muzaffarabad',
+        id: 22
+    },
+    {
+        name: 'Bahawalpur',
+        id: 23
+    },
+    {
+        name: 'DG Khan',
+        id: 24
     },
 ]
 

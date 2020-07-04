@@ -29,72 +29,142 @@ class TopFilters extends Component {
   }
 
   render() {
-    let weight = [{
-      label: '40 - 80 kg (2-3 mann)',
-      value: '40-80'
-    }, {
-      label: '80 - 120 kg (3-4 mann)',
-      value: '80-120'
-    }, {
-      label: '120 - 160 kg (3-4 mann)',
-      value: '120-160'
-    }];
-    let price = [{
-      label: '40,000 - 50,000 Rs',
-      value: '40000-50000'
-    }, {
-      label: '50,000 - 60,000 Rs',
-      value: '50000-60000'
-    }, {
-      label: '60,000 - 70,000 Rs',
-      value: '60000-70000'
-    }];
+    let weight = [
+      {
+        abel: '< 40 kg (1 mann)',
+        value: '0-40'
+      },
+      {
+        label: '40 - 80 kg (2-3 mann)',
+        value: '40-80'
+      }, {
+        label: '80 - 120 kg (3-4 mann)',
+        value: '80-120'
+      }, {
+        label: '120 - 160 kg (3-4 mann)',
+        value: '120-160'
+      }, {
+        abel: '160 - 200 kg (3-4 mann)',
+        value: '160-200'
+      }, {
+        abel: '200 - 240 kg (3-4 mann)',
+        value: '200-240'
+      }, {
+        abel: '240 - 280 kg (3-4 mann)',
+        value: '240-280'
+      }, {
+        abel: '280 - 320 kg (3-4 mann)',
+        value: '280-320'
+      }, {
+        abel: '320 - 360 kg (3-4 mann)',
+        value: '320-360'
+      }, {
+        abel: '360 - 400 kg (3-4 mann)',
+        value: '360-400'
+      }, {
+        abel: '> 400 kg (10 mann)',
+        value: '400-999999'
+      },
+    ];
+    let price = [
+      {
+        label: '< 20,000 Rs',
+        value: '0-20000'
+      },
+      {
+        label: '20,000 - 40,000 Rs',
+        value: '20000-40000'
+      },
+      {
+        label: '40,000 - 60,000 Rs',
+        value: '40000-60000'
+      }, {
+        label: '60,000 - 80,000 Rs',
+        value: '60000-80000'
+      }, {
+        label: '80,000 - 1,00,0000 Rs',
+        value: '80000-100000'
+      }, {
+        label: '1,00,000 - 1,20,0000 Rs',
+        value: '100000-1200000'
+      }, {
+        label: '1,20,000 - 1,40,0000 Rs',
+        value: '120000-1400000'
+      }, {
+        label: '1,40,0000 - 1,60,0000 Rs',
+        value: '140000-1600000'
+      }, {
+        label: '1,60,000 - 1,80,0000 Rs',
+        value: '160000-1800000'
+      }, {
+        label: '1,80,000 - 2,00,0000 Rs',
+        value: '180000-2000000'
+      }, {
+        label: '2,00,000 - 2,20,0000 Rs',
+        value: '200000-2200000'
+      }, {
+        label: '2,20,000 - 2,40,0000 Rs',
+        value: '220000-2400000'
+      }, {
+        label: '2,40,0000 - 2,60,0000 Rs',
+        value: '240000-2600000'
+      }, {
+        label: '2,60,000 - 2,80,0000 Rs',
+        value: '260000-2800000'
+      }, {
+        label: '2,80,000 - 3,00,0000 Rs',
+        value: '280000-3000000'
+      }, {
+        label: '> 3,00,0000 Rs',
+        value: '300000-99999999'
+      },
+    ];
     return (
       <>
         <View
           style={styles.container}>
 
           <View style={styles.filterContainer}>
-          <View style={styles.editBtnContainer}>
-            <Picker
-              mode={"dropdown"}
-              selectedValue={this.state.selectedWeight}
-              style={styles.editBtn}
-              onValueChange={(itemValue, itemIndex) => {
-                this.setState({ selectedWeight: itemValue });
-                this.props.weightFilterCallback( itemValue === 0 ? "0-999999" : weight[itemIndex - 1].value)
-              }}>
-              <Picker.Item label="Select Weight" value={0} />
-              {
-                weight.map((option, index) => {
-                  return (
-                    <Picker.Item label={option.label} value={option.value} />
-                  )
-                })
-              }
-            </Picker>
+            <View style={styles.editBtnContainer}>
+              <Picker
+                mode={"dropdown"}
+                selectedValue={this.state.selectedWeight}
+                style={styles.editBtn}
+                onValueChange={(itemValue, itemIndex) => {
+                  this.setState({ selectedWeight: itemValue });
+                  this.props.weightFilterCallback(itemValue === 0 ? "0-999999" : weight[itemIndex - 1].value)
+                }}>
+                <Picker.Item label="Select Weight" value={0} />
+                {
+                  weight.map((option, index) => {
+                    return (
+                      <Picker.Item label={option.label} value={option.value} />
+                    )
+                  })
+                }
+              </Picker>
             </View>
           </View>
 
           <View style={styles.filterContainer}>
             <View style={styles.editBtnContainer}>
-            <Picker
-              mode={"dropdown"}
-              selectedValue={this.state.selectedPrice}
-              style={styles.editBtn}
-              onValueChange={(itemValue, itemIndex) => {
-                this.setState({ selectedPrice: itemValue })
-                this.props.priceFilterCallback(itemValue === 0 ? "0-999999" : price[itemIndex - 1].value)
-              }}>
-              <Picker.Item label="Select Price" value={0} />
-              {
-                price.map((option, index) => {
-                  return (
-                    <Picker.Item label={option.label} value={option.value} />
-                  )
-                })
-              }
-            </Picker>
+              <Picker
+                mode={"dropdown"}
+                selectedValue={this.state.selectedPrice}
+                style={styles.editBtn}
+                onValueChange={(itemValue, itemIndex) => {
+                  this.setState({ selectedPrice: itemValue })
+                  this.props.priceFilterCallback(itemValue === 0 ? "0-999999" : price[itemIndex - 1].value)
+                }}>
+                <Picker.Item label="Select Price" value={0} />
+                {
+                  price.map((option, index) => {
+                    return (
+                      <Picker.Item label={option.label} value={option.value} />
+                    )
+                  })
+                }
+              </Picker>
             </View>
           </View>
 
