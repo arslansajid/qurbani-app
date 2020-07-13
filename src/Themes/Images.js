@@ -3,6 +3,8 @@ const images = {
   logoWhite: require('../../images/logo_white.png'),
   logoBlue: require('../../images/logo_blue.png'),
   goatLogo: require('../../images/goat.png'),
+  goatLogoWhite: require('../../images/logo_green_white.png'),
+  goatLogoBlack: require('../../images/logo_green_black.png'),
   cowLogo: require('../../images/cow.png'),
   placeholder: require('../../images/placeholder.jpg'),
   avatar: require('../../images/avatar2.png'),

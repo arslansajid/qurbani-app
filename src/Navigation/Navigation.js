@@ -6,7 +6,9 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import Splash from '../Containers/IntroFlow/Splash';
 import SignIn from '../Containers/AuthFlow/SignIn';
+import Sign_In from '../Containers/AuthFlow/Sign_in';
 import SignUp from '../Containers/AuthFlow/SignUp';
+import Sign_Up from '../Containers/AuthFlow/Sign_up';
 import Home from '../Containers/MainFlow/Home/Home';
 import FilterSearchScreen from '../Containers/MainFlow/Home/FilterSearchScreen';
 import FavoriteJobsScreen from '../Containers/MainFlow/Home/FavoriteJobsScreen';
@@ -28,6 +30,7 @@ import {Icon} from 'react-native-elements';
 import commonStyles from '../Containers/Styles/commonStyles';
 import Drawer from '../Components/Drawer';
 import DrawerIcon from '../Components/DrawerIcon';
+import images from '../Themes/Images';
 
 import {View, Image, Text} from 'react-native';
 
@@ -42,13 +45,13 @@ const IntroStack = createStackNavigator({
 
 const AuthStack = createStackNavigator({
   SignIn: {
-    screen: SignIn,
+    screen: Sign_In,
     navigationOptions: {
       header: null,
     },
   },
   SignUp: {
-    screen: SignUp,
+    screen: Sign_Up,
     navigationOptions: {
       header: null,
     },
@@ -188,10 +191,20 @@ const AppStack = createStackNavigator({
     screen: MainDrawer,
     navigationOptions: ({navigation}) => ({
       headerLeft: <DrawerIcon navigation={navigation} />,
+      headerTitle: <View style={{alignItems: 'center', justifyContent: 'center', width: '80%'}}>
+        <Image
+          source={images.goatLogoBlack}
+          resizeMode="contain"
+          style={{width: totalSize(7), height: totalSize(7)}}
+        />
+      </View>,
       headerStyle: {
         elevation: 0,
         borderBottomWidth: 0,
         shadowColor: 'transparent',
+        // alignSelf: 'center',
+        // textAlign: 'center',
+        // flex: 1,
       },
     }),
   },
