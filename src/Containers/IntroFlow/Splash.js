@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, ImageBackground, Image, ActivityIndicator} from 'react-native';
+import {View, ImageBackground, Image, ActivityIndicator, AsyncStorage} from 'react-native';
 import commonStyles from '../Styles/commonStyles';
 import images from '../../Themes/Images';
 import {height} from 'react-native-dimension';
@@ -7,9 +7,14 @@ import colors from '../../Themes/Colors';
 
 class Splash extends Component {
   componentDidMount = () => {
-    setTimeout(() => {
-      this.props.navigation.navigate('Auth');
-    }, 2500);
+    setTimeout(async () => {
+      let userToken = await AsyncStorage.getItem("userToken");
+      if(!!userToken) {
+        this.props.navigation.navigate('App');
+      } else {
+        this.props.navigation.navigate('Auth');
+      }
+    }, 1000);
   };
 
   render() {
@@ -25,7 +30,7 @@ class Splash extends Component {
           style={commonStyles.logoStyle}
         />
         <View style={{position: 'absolute', bottom: height(5)}}>
-          <ActivityIndicator color={colors.appColor1} size="large" />
+          <ActivityIndicator color={colors.white} /* size="large" */ />
         </View>
       </View>
     );
