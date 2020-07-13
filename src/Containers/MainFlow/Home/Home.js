@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableHighlight,
+  AsyncStorage
 } from 'react-native';
 import { totalSize, height, width } from 'react-native-dimension';
 import commonStyles from '../../Styles/commonStyles';
@@ -19,7 +20,9 @@ import PropTypes from 'prop-types';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { Icon } from 'react-native-elements';
 import {Categories} from "../../../Api/static/data";
-
+import {userLogin} from '../../../redux/actions/LoginActions';
+import {firebase} from "../../../Backend/firebase";
+import { getUserByEmail } from '../../../Backend/Services/usersService';
 
 const items = [
   // this is the parent or 'item'
@@ -66,7 +69,6 @@ class Home extends Component {
   }
 
   static navigationOptions = ({ navigation, screenProps, navigationOptions }) => {
-    const jobsCount = navigation.getParam('jobsCount', 0);
     return {
       headerTitleStyle: {
         alignSelf: 'center',
@@ -85,6 +87,18 @@ class Home extends Component {
       headerRight: <View />,
     };
   };
+
+  async componentDidMount() {
+    await firebase.auth().onAuthStateChanged(async(user) => {
+      if (user) {
+        // User is signed in.
+        const userData = await getUserByEmail(user.email)
+        this.props.dispatch(userLogin(userData[0]));
+        await AsyncStorage.setItem("userToken", user.email);
+        // this.props.dispatch(userLogin(user));
+      }
+  })
+  }
 
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
@@ -253,7 +267,8 @@ export default connect(mapStateToProps)(Home);
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    padding: width(5),
+    marginTop: 7,
+    paddingHorizontal: width(5),
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: width(6)
