@@ -25,7 +25,7 @@ import { Cities, Categories } from "../../../Api/static/data"
 // import ImagePicker from 'react-native-image-picker';
 // import Autocomplete from 'react-native-autocomplete-input';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import { addBull, addSaand, addCamel, addBakra, addSheep, addDumba } from "../../../Backend/Services/bullService";
+import { addBull, addSaand, addCamel, addBakra, addSheep, addDumba, getAnimal, getBulls, getSaands, getCamels, getBakras, getSheeps, getDumbas } from "../../../Backend/Services/bullService";
 import { firebase } from "../../../Backend/firebase";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
@@ -34,35 +34,7 @@ import colors from '../../../Themes/Colors';
 import { Overlay } from 'react-native-elements';
 import MultiSelect from 'react-native-multiple-select';
 
-const imageResizeFileUri = ({ file }) => {
-  const fileUri = Platform.OS === 'ios' ? uri.replace('file://', '') : file
-    new Promise((resolve) => {
-        Resizer.imageFileResizer(
-            fileUri,
-            700,
-            700,
-            'JPEG',
-            95,
-            0,
-            (uri) => {
-                resolve(uri);
-            },
-            'base64'
-        );
-    });
-  }
-
 const tempWindowXMLHttpRequest = window.XMLHttpRequest;
-
-const options = {
-  title: 'Select Files',
-  multi: true,
-  // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
 
 class AnimalUploadScreen extends Component {
   constructor(props) {
@@ -73,7 +45,7 @@ class AnimalUploadScreen extends Component {
       avatarSource: null,
       isPicture: true,
       query: "",
-      weightUnit: 'kg',
+      weightUnit: 'mann',
       data: [...Cities],
       gender: null,
       imageUrl: '',
@@ -103,6 +75,67 @@ class AnimalUploadScreen extends Component {
 
   onSelectCategory = (value) => {
     this.setState({ selectedCategory: value })
+    if (value === "Bull") {
+      getAnimal('bulls')
+      .then((animals) => {
+        const animalsArray = [...animals];
+        let totalElementsInDb = animalsArray.length;
+        this.setState({
+          totalElementsInDb,
+          categoryId: "1"
+        })
+      })
+    } else if (value === "Saand") {
+      getAnimal('saands')
+      .then((animals) => {
+        const animalsArray = [...animals];
+        let totalElementsInDb = animalsArray.length;
+        this.setState({
+          totalElementsInDb,
+          categoryId: "2"
+        })
+      })
+    } else if (value === "Camel") {
+      getAnimal('camels')
+      .then((animals) => {
+        const animalsArray = [...animals];
+        let totalElementsInDb = animalsArray.length;
+        this.setState({
+          totalElementsInDb,
+          categoryId: "3"
+        })
+      })
+    } else if (value === "Bakra") {
+      getAnimal('bakras')
+      .then((animals) => {
+        const animalsArray = [...animals];
+        let totalElementsInDb = animalsArray.length;
+        this.setState({
+          totalElementsInDb,
+          categoryId: "4"
+        })
+      })
+    } else if (value === "Sheep") {
+      getAnimal('sheeps')
+      .then((animals) => {
+        const animalsArray = [...animals];
+        let totalElementsInDb = animalsArray.length;
+        this.setState({
+          totalElementsInDb,
+          categoryId: "5"
+        })
+      })
+    } else if (value === "Dumba") {
+      getAnimal('dumbas')
+      .then((animals) => {
+        const animalsArray = [...animals];
+        let totalElementsInDb = animalsArray.length;
+        this.setState({
+          totalElementsInDb,
+          categoryId: "6"
+        })
+      })
+    }
   }
 
   toggleImagePickerAlert = () => {
@@ -179,7 +212,7 @@ class AnimalUploadScreen extends Component {
       images: [],
       selectedCities: [],
       isPicture: true,
-      weightUnit: 'kg',
+      weightUnit: 'mann',
       price: '',
       contact: '',
       weight: '',
@@ -191,8 +224,16 @@ class AnimalUploadScreen extends Component {
     })
   }
 
+  generateId = () => {
+    const {totalElementsInDb, categoryId} = this.state;
+    let numWithZeros =  String(totalElementsInDb).padStart(4, '0')
+    let id = categoryId + numWithZeros;
+    return id;
+  }
+
   submitForm = async () => {
     const { location, price, mobilevalidate, contact, weight, gender, description, image, selectedCategory, imageFilesArray, selectedCities, weightUnit } = this.state;
+    const { user } = this.props;
 
     if (!!selectedCities && price && (mobilevalidate && contact) && weight && weightUnit && gender && imageFilesArray.length > 0 && selectedCategory) {
 
@@ -216,11 +257,14 @@ class AnimalUploadScreen extends Component {
       console.log("downloadUrl", urlsArray)
 
       const animal = {
+        customerName: user.name ? user.name : "",
+        animalId: this.generateId(),
         image: urlsArray,
         location: selectedCities,
         price: Number(price),
         contact: contact,
         weight: Number(weight),
+        weightInKG: weightUnit === "mann" ? Number(weight) * 40 : Number(weight),
         gender: gender,
         description: description,
         weightUnit: weightUnit,
@@ -584,6 +628,11 @@ class AnimalUploadScreen extends Component {
           searchInputStyle={{ color: '#CCC' }}
           submitButtonColor={colors.appColor1}
           submitButtonText="Submit"
+          flatListProps={{height: 100}}
+          // fixedHeight={true}
+          // styleItemsContainer={{height: 100, backgroundColor: 'red'}}
+          // styleListContainer={{height: 100, backgroundColor: 'red'}}
+          // nestedScrollEnabled is added prposefully 
         />
       </View>
 
@@ -645,8 +694,8 @@ class AnimalUploadScreen extends Component {
             onValueChange={(itemValue, itemIndex) =>
               this.setState({ weightUnit: itemValue })
             }>
-            <Picker.Item label="KG" value="kg" />
-            <Picker.Item label="Mann" value="mann" />
+              <Picker.Item label="Mann" value="mann" />
+              <Picker.Item label="KG" value="kg" />
           </Picker>
           </View>
         </View>
@@ -659,7 +708,7 @@ class AnimalUploadScreen extends Component {
             onValueChange={(itemValue, itemIndex) =>
               this.setState({ gender: itemValue })
             }>
-            <Picker.Item label="Gender*" value="java" />
+            <Picker.Item label="Gender*" value={0} />
             <Picker.Item label="Male" value="Male" />
             <Picker.Item label="Female" value="Female" />
           </Picker>
@@ -693,12 +742,14 @@ class AnimalUploadScreen extends Component {
 AnimalUploadScreen.propTypes = {
   selectedCity: PropTypes.object,
   selectedCategory: PropTypes.object,
+  user: PropTypes.object,
 };
 
 function mapStateToProps(state) {
   return {
     selectedCity: state.city,
     selectedCategory: state.category,
+    user: state.user,
   };
 }
 
