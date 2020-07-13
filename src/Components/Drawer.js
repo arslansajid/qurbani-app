@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 import {DrawerItems} from 'react-navigation-drawer';
 import colors from '../Themes/Colors';
@@ -14,11 +15,22 @@ import {totalSize, height, width} from 'react-native-dimension';
 import commonStyles from '../Containers/Styles/commonStyles';
 import images from '../Themes/Images';
 import { Avatar } from 'react-native-paper';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import {signOut} from "../Backend/Services/authService"
 
-
-export default class Drawer extends Component {
+class Drawer extends Component {
   constructor(props) {
     super(props);
+  }
+
+  handleSignOut = () => {
+    signOut()
+    .then(async () => {
+      await AsyncStorage.removeItem("userToken");
+      this.props.navigation.navigate('SignIn');
+      this.props.navigation.closeDrawer();
+    })
   }
 
   render() {
@@ -44,7 +56,12 @@ export default class Drawer extends Component {
                     // justifyContent: 'center'
                   }}>
                     <Avatar.Image size={48} source={images.avatar} style={{margin: width(6)}} />
-                  <Text style={[commonStyles.h3, {color: colors.white}]}>Arslan Sajid</Text>
+                    <View>
+                    <Text style={[commonStyles.h3, {color: colors.white}]}>{this.props.user?.name}</Text>
+                    <Text style={[commonStyles.h5, {color: colors.white}]}>{this.props.user?.phone}</Text>
+                    
+                    </View>
+                  
                 </View>
               <View>
               
@@ -230,10 +247,7 @@ export default class Drawer extends Component {
                 </View>
               </TouchableOpacity> */}
               <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate('SignIn');
-                  this.props.navigation.closeDrawer();
-                }}
+                onPress={() => this.handleSignOut()}
                 style={{marginHorizontal: width(5)}}>
                 <View
                   style={{
@@ -258,3 +272,15 @@ export default class Drawer extends Component {
     );
   }
 }
+
+Drawer.propTypes = {
+  user: PropTypes.object,
+};
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(Drawer)
