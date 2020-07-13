@@ -15,6 +15,8 @@ import {Icon} from 'react-native-elements';
 import colors from '../../../Themes/Colors';
 import type from '../../../Themes/Fonts';
 import commonStyles from '../../Styles/commonStyles';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +31,7 @@ class Profile extends Component {
       <ScrollView>
         <View style={styles.mainContainer}>
           <View style={styles.RowCompContainer}>
-            <Text style={commonStyles.h3}>Arslan Sajid</Text>
+            <Text style={commonStyles.h3}>{this.props.user?.name}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icon
                 name="md-cart"
@@ -51,7 +53,7 @@ class Profile extends Component {
               onPress={() => navigate('location')}
               style={{borderBottomWidth: 0.5, borderBottomColor: colors.steel}}>
               <View style={styles.RowCompContainer}>
-                <Text style={styles.h5}>Islamabad</Text>
+                <Text style={styles.h5}>{this.props.user?.city}</Text>
                 <Icon
                   name="ios-arrow-forward"
                   type="ionicon"
@@ -221,8 +223,6 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
-
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -328,3 +328,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
 });
+
+
+Profile.propTypes = {
+  user: PropTypes.object,
+};
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(Profile)
