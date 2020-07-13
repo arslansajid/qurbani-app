@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { totalSize, width, height } from "react-native-dimension"
 import colors from '../Themes/Colors';
@@ -8,7 +8,6 @@ import { Icon } from 'react-native-elements';
 import { setCategory } from '../redux/actions/CandidateFiltersActions';
 import { connect } from 'react-redux';
 import commonStyles from '../Containers/Styles/commonStyles';
-import Styles from '../Containers/GalleryScreens/styles/GalleryScreenStyles';
 
 const CategoryCard = (props) => {
     const { title, image, navigation, parent, onSelect, selected, index, toggleErrorState } = props;
@@ -43,7 +42,7 @@ const CategoryCard = (props) => {
             <TouchableOpacity
                 onPress={() => parent === "upload" ? onSelect(title) : onCardSelect(title)}
                 style={styles.cardContainer}>
-                <Card.Cover resizeMode={"cover"} style={{ height: parent === "upload" ? totalSize(12) : totalSize(15), zIndex: 1 }} source={image} />
+                <Image  style={{ height: parent === "upload" ? totalSize(12) : totalSize(12), zIndex: 1, resizeMode: "contain" }} source={image} />
                 <Card.Content style={{ paddingBottom: 0, paddingHorizontal: 0 }}>
                     {/* <Title style={{textAlign: 'center'}}>{title}</Title> */}
                     <Text style={[{ textAlign: 'center', marginVertical: 3 }, commonStyles.h4, commonStyles.bold]}>{title}</Text>
@@ -66,7 +65,9 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: colors.steel,
         // borderRadius: 5,
-        // overflow: 'hidden'
+        // overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
