@@ -4,6 +4,23 @@ import { Bull } from '../Models/bull';
 
 //get functions
 
+export const getAnimal = async function (animalCategory) {
+    let animals = [];
+    try {
+        const query = await db.collection(animalCategory).get();
+        query.docs.forEach((doc) => {
+            const animal = Bull.fromFirestore(doc);
+            if (animal) {
+                animals.push(animal);
+            }
+        });
+        console.log('animals', animals);
+        return animals;
+      } catch (err) {
+        throw err;
+      }
+};
+
 export const getBulls = async function () {
     const query = await db.collection('bulls').limit(20).get();
 
@@ -25,6 +42,8 @@ export const getAnimalsByCity = async function (animal, city) {
     const query = await db
         .collection(documentToQuery)
         .where('location', 'array-contains', city)
+        .orderBy('weightInKG', 'asc')
+        // .orderBy('price', 'asc')
         .get();
 
         let animals = [];
@@ -36,20 +55,27 @@ export const getAnimalsByCity = async function (animal, city) {
             }
         });
 
+        // sort by price
+        animals.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+
         return animals;
 }
 
 export const getAnimalsByFilter = async function (animal, city, weight, price) {
+    console.log("################## getAnimalsByFilter", {weight, price})
     const weightStart = !!weight ? Number(weight.split("-")[0]) : 0
     const weightEnd = !!weight ? Number(weight.split("-")[1]) : 99999999
     const priceStart = !!price ? Number(price.split("-")[0]) : 0
     const priceEnd = !!price ? Number(price.split("-")[1]) : 99999999
     const documentToQuery = animal.toLowerCase() + "s";
+    console.log("################## getAnimalsByFilter", {weightStart, weightEnd, priceStart, priceEnd})
     
     const query = await db
         .collection(documentToQuery)
         .where('location', 'array-contains', city)
-        .where('weight', '>=', weightStart).where('weight', '<=', weightEnd)
+        .where('weightInKG', '>=', weightStart).where('weightInKG', '<=', weightEnd)
+        .orderBy('weightInKG', 'asc')
+        // .orderBy('price', 'asc')
         .get();
 
         let animals = [];
@@ -60,6 +86,9 @@ export const getAnimalsByFilter = async function (animal, city, weight, price) {
                 animals.push(animal);
             }
         });
+
+        // sort by price
+        animals.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
 
         return animals;
 }
