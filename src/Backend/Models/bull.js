@@ -2,6 +2,8 @@
 export class Bull {
     constructor(x) {
         this.uuid = x.uuid;
+        this.animalId = x.animalId;
+        this.customerName = x.customerName;
         this.color = x.color;
         this.image = x.image;
         this.contact = x.contact;
@@ -10,6 +12,7 @@ export class Bull {
         this.gender = x.gender;
         this.price = x.price;
         this.weight = x.weight;
+        this.weightInKG = x.weightInKG;
         this.weightUnit = x.weightUnit;
         this.timestampAdded = x.timestampAdded;
     }
@@ -21,6 +24,8 @@ export class Bull {
 
         return new Bull({
             uuid: doc.id,
+            animalId: data['animalId'] ? data['animalId'] : '',
+            customerName: data['customerName'] ? data['customerName'] : '',
             color: data['color'] ? data['color'] : '',
             image: data['image'] ? data['image'] : [],
             contact: data['contact'] ? data['contact'] : [],
@@ -29,6 +34,7 @@ export class Bull {
             gender: data['gender'] ? data['gender'] : [],
             price: data['price'] ? data['price'] : [],
             weight: data['weight'] ? data['weight'] : [],
+            weightInKG: data['weightInKG'] ? data['weightInKG'] : '',
             weightUnit: data['weightUnit'] ? data['weightUnit'] : '',
             timestampAdded: new Date(),
         });
@@ -37,6 +43,8 @@ export class Bull {
     toJson(x) {
         return {
             uuid: x.uuid,
+            animalId: x.animalId,
+            customerName: x.customerName,
             color: x.color,
             image: x.image,
             contact: x.contact,
@@ -45,6 +53,7 @@ export class Bull {
             gender: x.gender,
             price: x.price,
             weight: x.weight,
+            weightInKG: x.weightInKG,
             timestampAdded: x.timestampAdded,
             weightUnit: x.weightUnit,
         };
