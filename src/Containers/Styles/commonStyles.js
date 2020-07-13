@@ -79,6 +79,15 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.appColor1,
   },
+  inputErrorContainer : {
+    width: width(80),
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 100,
+    justifyContent: 'space-evenly',
+    borderWidth: 1,
+    borderColor: 'red',
+  },
   buttonColored: {
     height: height(7),
     width: width(80),
