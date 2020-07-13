@@ -176,7 +176,7 @@ class EmployerDetailScreen extends Component {
 
 
                 <View style={[commonStyles.space_btw, commonStyles.row, commonStyles.align_center, styles.detailsContainer]}>
-                  <Text style={[commonStyles.h3]}>{employer.label}</Text>
+                  <Text style={[commonStyles.h3]}>{employer.customerName}</Text>
                 <StarRating
                   disabled={true}
                   maxStars={5}
@@ -214,7 +214,7 @@ class EmployerDetailScreen extends Component {
 
                   <View style={styles.detailsRow}>
                     <View style={styles.leftContainer}>
-                      <Text style={[commonStyles.h4]}>{'Animal ID: 1234'}</Text>
+                      <Text style={[commonStyles.h4]}>{'Animal ID:'} {employer.animalId ? employer.animalId : "N/A"}</Text>
                     </View>
                     <View style={styles.rightContainer}>
                       <Text style={[commonStyles.h4]}>Cell #: {employer.contact}</Text>
