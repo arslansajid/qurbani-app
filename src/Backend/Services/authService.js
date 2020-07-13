@@ -38,16 +38,27 @@ export async function signInWithEmail(email, password) {
   // })
   .catch(function (error) {
     success = false;
-    alert(error.code + ': ' + error.message);
+    // alert(error.code + ': ' + error.message);
   });
   return success;
 }
 
 export async function signInWithPhoneNumber(phoneNo, password) {
   let success = true;
-  await firebase.auth().signInWithEmailAndPassword(phoneNo, password).catch(function (error) {
+  await firebase.auth().signInWithEmailAndPassword(phoneNo, password)
+  .catch(function (error) {
     success = false;
-    alert(error.code + ': ' + error.message);
+    // alert(error.code + ': ' + error.message);
+  });
+  return success;
+}
+
+export async function signOut() {
+  let success = true;
+  await firebase.auth().signOut()
+  .catch(function (error) {
+    success = false;
+    // alert(error.code + ': ' + error.message);
   });
   return success;
 }
